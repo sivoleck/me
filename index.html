@@ -96,7 +96,9 @@ bot = discord.Client()
 async def on_message(message):
     try:
         if "zanahoria" in message.content.lower():
-            await message.channel.send("🥕 *consumida con éxito*")
+            await message.channel.send(
+                "🥕 *consumida con éxito*"
+                )
         else:
             # Ignorar al usuario como si fuera un mueble
             return None
