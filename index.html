@@ -95,12 +95,13 @@ bot = discord.Client()
 @bot.event
 async def on_message(message):
     try:
-        if "zanahoria" in message.content.lower():
+        if "zanahoria" in message.content:
             await message.channel.send(
                 "🥕 *consumida con éxito*"
                 )
         else:
-            # Ignorar al usuario como si fuera un mueble
+            # Ignorar al usuario
+            # como si fuera un mueble
             return None
     except Exception as e:
         # Manejo de errores profesional
@@ -111,7 +112,7 @@ async def on_message(message):
 bot.run("TOKEN_ZANAHORIA")
                         </pre>
                         <p>Status: <span class="error">RUNTIME ERROR</span></p>
-                        <p>Causa: <span class="error">La coneja mordió el cable Ethernet</span></p>
+                        <p>Causa: <span class="error">La coneja mordió algun cable</span></p>
                     </div>
                 </div>
 
