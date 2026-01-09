@@ -1,0 +1,530 @@
+:root {
+    --bg-color: #080808;
+    --text-primary: #e0e0e0;
+    --neon-violet: #9d00ff;
+    --neon-magenta: #ff00ff;
+    --neon-cyan: #00f3ff;
+    --error-red: #ff3333;
+    --matrix-green: #0f0;
+
+    --font-heading: 'VT323', monospace;
+    --font-code: 'JetBrains Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-code);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    font-size: 16px;
+}
+
+/* --- CRT & NOISE EFFECTS --- */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0) 50%,
+            rgba(0, 0, 0, 0.2) 50%,
+            rgba(0, 0, 0, 0.2));
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.03;
+    z-index: 99;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Glitch mode (activated by terminal command) */
+.glitch-mode {
+    animation: glitch-screen 0.1s infinite;
+}
+
+@keyframes glitch-screen {
+    0% {
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+    }
+
+    20% {
+        transform: translate(-2px, 2px);
+        filter: hue-rotate(90deg);
+    }
+
+    40% {
+        transform: translate(2px, -2px);
+        filter: hue-rotate(180deg);
+    }
+
+    60% {
+        transform: translate(-1px, 1px);
+        filter: hue-rotate(270deg);
+    }
+
+    80% {
+        transform: translate(1px, -1px);
+        filter: hue-rotate(360deg);
+    }
+
+    100% {
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+    }
+}
+
+/* --- LAYOUT --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+    /* Content is interactable */
+}
+
+/* Ensure overlays don't block clicks */
+.scanlines,
+.noise {
+    pointer-events: none !important;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--neon-violet);
+    background: rgba(8, 8, 8, 0.9);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--neon-magenta);
+    text-shadow: 2px 2px 0px var(--neon-violet);
+    cursor: pointer;
+    user-select: none;
+}
+
+nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    margin-left: 1rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* --- HERO --- */
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.glitch-title {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    color: var(--text-primary);
+    position: relative;
+    display: inline-block;
+}
+
+/* Simple Glitch Effect */
+.glitch-title::before,
+.glitch-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+}
+
+.glitch-title::before {
+    left: 2px;
+    text-shadow: -1px 0 var(--neon-magenta);
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+.glitch-title::after {
+    left: -2px;
+    text-shadow: -1px 0 var(--neon-cyan);
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(10px, 9999px, 30px, 0);
+    }
+
+    20% {
+        clip: rect(80px, 9999px, 100px, 0);
+    }
+
+    40% {
+        clip: rect(30px, 9999px, 60px, 0);
+    }
+
+    60% {
+        clip: rect(70px, 9999px, 80px, 0);
+    }
+
+    80% {
+        clip: rect(20px, 9999px, 50px, 0);
+    }
+
+    100% {
+        clip: rect(50px, 9999px, 70px, 0);
+    }
+}
+
+@keyframes glitch-anim-2 {
+    0% {
+        clip: rect(60px, 9999px, 90px, 0);
+    }
+
+    20% {
+        clip: rect(10px, 9999px, 40px, 0);
+    }
+
+    40% {
+        clip: rect(50px, 9999px, 80px, 0);
+    }
+
+    60% {
+        clip: rect(20px, 9999px, 30px, 0);
+    }
+
+    80% {
+        clip: rect(90px, 9999px, 100px, 0);
+    }
+
+    100% {
+        clip: rect(30px, 9999px, 60px, 0);
+    }
+}
+
+.console-box {
+    margin: 2rem auto;
+    background: #111;
+    padding: 1rem;
+    border-left: 3px solid var(--neon-violet);
+    width: fit-content;
+    font-family: var(--font-code);
+    text-align: left;
+}
+
+.prompt {
+    color: var(--neon-cyan);
+    margin-right: 0.5rem;
+}
+
+.status-badges {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.badge {
+    border: 1px solid var(--neon-violet);
+    padding: 0.2rem 0.8rem;
+    font-size: 0.9rem;
+    background: rgba(157, 0, 255, 0.1);
+    box-shadow: 0 0 5px rgba(157, 0, 255, 0.2);
+}
+
+/* --- SECTIONS --- */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--neon-magenta);
+    margin: 3rem 0 1.5rem;
+    border-bottom: 2px dashed var(--neon-violet);
+}
+
+.code-block {
+    background: #151515;
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid #333;
+    font-family: var(--font-code);
+    color: #ccc;
+}
+
+.keyword {
+    color: var(--neon-magenta);
+}
+
+.string {
+    color: var(--neon-cyan);
+}
+
+.comment {
+    color: #666;
+    font-style: italic;
+}
+
+.var {
+    color: #ffbd2e;
+}
+
+.class-name {
+    color: #a6e22e;
+}
+
+.function {
+    color: #66d9ef;
+}
+
+.number {
+    color: #ae81ff;
+}
+
+.indent {
+    margin-left: 2rem;
+}
+
+.intro-text {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #aaa;
+}
+
+/* --- GRID CARDS --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: #0f0f0f;
+    border: 1px solid #333;
+    transition: all 0.2s;
+}
+
+.card:hover {
+    border-color: var(--neon-cyan);
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 var(--neon-cyan);
+}
+
+.card-header {
+    background: #1a1a1a;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid #333;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: var(--neon-violet);
+    border-radius: 50%;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.error {
+    color: var(--error-red);
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+/* --- TERMINAL --- */
+.terminal-wrapper {
+    margin-top: 4rem;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #666;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+    background: #333;
+    color: #fff;
+    padding: 0.2rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.terminal-body {
+    height: 300px;
+    padding: 1rem;
+    overflow-y: auto;
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+}
+
+.highlight {
+    color: var(--neon-cyan);
+}
+
+.input-line {
+    display: flex;
+    padding: 0.5rem 1rem;
+    background: #111;
+    border-top: 1px solid #333;
+}
+
+#terminal-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-code);
+    flex: 1;
+    outline: none;
+    caret-color: var(--neon-cyan);
+    /* Make cursor visible */
+}
+
+/* --- ARCADE --- */
+.arcade-zone {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    border: 4px double var(--neon-magenta);
+}
+
+.arcade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.game-module {
+    background: #0a0a0a;
+    border: 1px solid var(--neon-violet);
+    padding: 1.5rem;
+}
+
+.game-module h3 {
+    font-family: var(--font-heading);
+    color: var(--neon-cyan);
+    margin-bottom: 1rem;
+}
+
+.score-display {
+    margin-top: 0.5rem;
+    color: var(--neon-magenta);
+}
+
+#guess-input {
+    background: #111;
+    border: 2px solid var(--neon-violet);
+    color: var(--neon-cyan);
+    padding: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    width: 150px;
+    text-align: center;
+}
+
+.btn-retro {
+    background: var(--neon-magenta);
+    border: none;
+    color: #000;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-retro:hover {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.feedback-msg {
+    margin-top: 1rem;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    min-height: 1.5em;
+}
+
+/* --- MATRIX CANVAS --- */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Top level */
+    display: none;
+    /* Hidden by default */
+}
+
+/* --- ANIMATIONS --- */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    color: #444;
+    font-size: 0.8rem;
+}
+
+.hidden-msg {
+    color: #111;
+    transition: color 0.5s;
+}
+
+.hidden-msg:hover {
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .glitch-title {
+        font-size: 3rem;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

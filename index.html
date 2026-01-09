@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sivoleck | System.Root</title>
+    <!-- Fonts: 'VT323' (Pixel-like terminal) and 'JetBrains Mono' (Code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=VT323&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+
+    <!-- Easter Egg: Matrix Rain Container (Hidden by default) -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <header>
+        <div class="logo" id="alias-trigger">SIVOLECK</div>
+        <nav>
+            <a href="#terminal-section">[TERMINAL]</a>
+            <a href="#arcade-section">[ARCADE]</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <h1 class="glitch-title" data-text="SIVOLECK">SIVOLECK</h1>
+            <!-- El alias cambiará con triple click -->
+
+            <div class="console-box">
+                <span class="prompt">root@esp-server:~$</span>
+                <span class="typing-text">No soy nadie importante, pero aún así este sitio existe.</span>
+            </div>
+
+            <p class="subtitle">Sobreviviendo a Bachillerato</p>
+
+            <div class="status-badges">
+                <span class="badge">Lvl. 16</span>
+                <span class="badge">Server: ES</span>
+                <span class="badge">Class: ?????</span>
+            </div>
+        </section>
+
+        <!-- ABOUT ME (Python Style) -->
+        <section class="about">
+            <h2 class="section-title">&lt;About /&gt;</h2>
+            <p class="intro-text">No soy nadie especial. Solo alguien muy curioso y al que le gusta resolver problemas.
+            </p>
+            <div class="code-block">
+                <pre>
+<span class="keyword">class</span> <span class="class-name">Sivoleck</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        self.level = <span class="number">16</span>
+        self.location = <span class="string">"España"</span>
+        self.status = <span class="string">"Sobreviviendo bachillerato"</span>
+        self.likes = [<span class="string">"resolver problemas"</span>, <span class="string">"programar"</span>, <span class="string">"romper cosas"</span>]
+        self.dislikes = [<span class="string">"bachillerato"</span>, <span class="string">"texturas raras en la comida"</span>,
+         <span class="string">"madrugar"</span>, <span class="string">"ingleses"</span>]
+        self.sleep_schedule = <span class="keyword">None</span>  <span class="comment"># deprecated</span>
+
+    <span class="keyword">def</span> <span class="function">daily_routine</span>(self):
+        <span class="keyword">while</span> <span class="keyword">True</span>:
+            self.code()
+            self.break_things()
+            self.fix_things()  <span class="comment"># a veces</span>
+                </pre>
+            </div>
+        </section>
+
+        <!-- PROJECTS & SNIPPETS -->
+        <section class="projects">
+            <h2 class="section-title">&lt;Projects /&gt;</h2>
+            <div class="grid">
+                <!-- Card 1: Bot Discord -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="dot"></span>
+                        <span class="title">moon_bot.py</span>
+                    </div>
+                    <div class="card-body">
+                        <pre>
+import discord
+
+bot = discord.Client()
+
+@bot.event
+async def on_message(message):
+    try:
+        # Lógica del bot aquí
+        pass
+    except Exception as e:
+        # Manejo de errores profesional
+        print(f"Error: {e}")
+        print("Solución: Darle una zanahoria")
+        raise
+
+# Status: RUNTIME ERROR
+# Causa: La coneja mordió el cable Ethernet
+bot.run("TOKEN_ZANAHORIA")
+                        </pre>
+                        <p>Status: <span class="error">RUNTIME ERROR</span></p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Code Snippet Absurdo -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="dot"></span>
+                        <span class="title">Logic.js</span>
+                    </div>
+                    <div class="card-body">
+                        <pre>
+while(alive) {
+  try {
+    study();
+  } catch (err) {
+    cry();
+  }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE TERMINAL -->
+        <section id="terminal-section" class="terminal-wrapper">
+            <div class="terminal-header">
+                <span>BASH - REMOTE</span>
+                <div class="controls">× − □</div>
+            </div>
+            <div class="terminal-body" id="terminal-output">
+                <p>Welcome to SIVOLECK_OS v1.0</p>
+                <p>Type <span class="highlight">'help'</span> to see available commands.</p>
+                <!-- Output dinámico aquí -->
+            </div>
+            <div class="input-line">
+                <span class="prompt">guest@web:~$</span>
+                <input type="text" id="terminal-input" autocomplete="off" autofocus>
+            </div>
+        </section>
+
+        <!-- ARCADE ZONE (2 Modules) -->
+        <section id="arcade-section" class="arcade-zone">
+            <h2 class="section-title pixel-font">ARCADE ZONE</h2>
+            <div class="arcade-grid">
+                <!-- Game 1: Guess the Number -->
+                <div class="game-module">
+                    <h3>MALDICIONES A BACH</h3>
+                    <p class="game-sub">¿Cuántas veces hoy? (0-20) | Intentos: <span id="prime-counter">0</span></p>
+                    <input type="number" id="guess-input" placeholder="??">
+                    <button id="guess-btn" class="btn-retro">GUESS</button>
+                    <div id="game-feedback" class="feedback-msg"></div>
+                </div>
+
+                <!-- Game 2: Prime Chain -->
+                <div class="game-module">
+                    <h3>CADENA DE PRIMOS</h3>
+                    <p class="game-sub">Actual: <span id="current-prime">2</span> → ¿Siguiente?</p>
+                    <input type="number" id="prime-input" placeholder="??">
+                    <button id="prime-btn" class="btn-retro">CHECK</button>
+                    <div id="prime-feedback" class="feedback-msg"></div>
+                    <p class="score-display">Racha: <span id="prime-streak">0</span></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p class="hidden-msg">Press Ctrl+Shift+X for truth</p>
+        <p>© 2026. Made with hatred & caffeine.</p>
+    </footer>
+
+    <!-- Audio Effects (Optional sources needed, using placeholders or JS generation) -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
