@@ -25,6 +25,35 @@ body {
     overflow-x: hidden;
     position: relative;
     font-size: 16px;
+
+    /* Scrollbar para Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #333 #080808;
+}
+
+/* Scrollbar personalizado para Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border: 1px solid #1a1a1a;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #444;
+    border-color: var(--neon-violet);
+}
+
+::-webkit-scrollbar-corner {
+    background: #080808;
 }
 
 /* --- CRT & NOISE EFFECTS --- */
@@ -460,7 +489,8 @@ nav a:hover {
     color: var(--neon-magenta);
 }
 
-#guess-input {
+#guess-input,
+#prime-input {
     background: #111;
     border: 2px solid var(--neon-violet);
     color: var(--neon-cyan);
