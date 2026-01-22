@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initArcade();
     initEasterEggs();
     initMatrix();
+    initVisitorCounter();
+    initScanlineToggle();
+    initSkills();
+    // Add flicker to headings
+    document.querySelectorAll('.section-title').forEach(el => el.classList.add('flicker'));
 });
 
 /* --- 0. LANGUAGE SYSTEM --- */
@@ -11,7 +16,7 @@ let currentLang = 'es';
 
 const translations = {
     es: {
-        nav: { about: '[SOBRE MI]', projects: '[PROYECTOS]', terminal: '[TERMINAL]', arcade: '[ARCADE]' },
+        nav: { about: '[SOBRE MI]', skills: '[SKILLS]', projects: '[PROYECTOS]', terminal: '[TERMINAL]', arcade: '[ARCADE]', contact: '[CONTACTO]' },
         hero: {
             typing: 'No soy nadie importante, pero aún así este sitio existe.',
             subtitle: 'Sobreviviendo a Bachillerato',
@@ -43,7 +48,12 @@ const translations = {
             attempts: 'Intentos:', guess: 'ADIVINA',
             current: 'Actual:', next: '¿Siguiente?', streak: 'Racha:'
         },
-        footer: { truth: 'Presiona Ctrl+Shift+X para la verdad', credits: 'Hecho con odio y cafeína.' },
+        footer: {
+            truth: 'Presiona Ctrl+Shift+X para la verdad',
+            credits: 'Hecho con odio y cafeína.',
+            visitors: 'Visitantes:'
+        },
+        contact: { intro: '¿Quieres decirme algo o insultarme? Adelante.' },
         // Terminal Responses
         cmds: {
             help: `Comandos: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
@@ -75,7 +85,7 @@ const translations = {
         }
     },
     en: {
-        nav: { about: '[ABOUT]', projects: '[PROJECTS]', terminal: '[TERMINAL]', arcade: '[ARCADE]' },
+        nav: { about: '[ABOUT]', skills: '[SKILLS]', projects: '[PROJECTS]', terminal: '[TERMINAL]', arcade: '[ARCADE]', contact: '[CONTACT]' },
         hero: {
             typing: 'I am no one important, yet this site exists.',
             subtitle: 'Surviving High School',
@@ -107,7 +117,12 @@ const translations = {
             attempts: 'Attempts:', guess: 'GUESS',
             current: 'Current:', next: 'Next?', streak: 'Streak:'
         },
-        footer: { truth: 'Press Ctrl+Shift+X for truth', credits: 'Made with hatred & caffeine.' },
+        footer: {
+            truth: 'Press Ctrl+Shift+X for truth',
+            credits: 'Made with hatred & caffeine.',
+            visitors: 'Visitors:'
+        },
+        contact: { intro: 'Want to say something or insult me? Go ahead.' },
         // Terminal Responses
         cmds: {
             help: `Commands: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
@@ -149,6 +164,81 @@ function initLanguage() {
             btn.innerText = `[${currentLang.toUpperCase()}]`;
         });
     }
+}
+
+async function initVisitorCounter() {
+    const countEl = document.getElementById('visit-count');
+    if (!countEl) return;
+
+    // Determine if we should increment or just get the current count
+    const hasVisited = sessionStorage.getItem('v_v');
+    const endpoint = hasVisited ? 'hit-count' : 'hit-count/up';
+
+    try {
+        const response = await fetch(`https://api.counterapi.dev/v1/sivoleck_portfolio/${endpoint}`);
+        const data = await response.json();
+        if (data && data.count !== undefined) {
+            countEl.innerText = data.count;
+            if (!hasVisited) sessionStorage.setItem('v_v', '1');
+        } else {
+            countEl.innerText = 'ERR';
+        }
+    } catch (err) {
+        console.error('Counter error:', err);
+        countEl.innerText = 'OFFLINE';
+    }
+}
+
+function initScanlineToggle() {
+    const btn = document.getElementById('scanline-toggle');
+    const scanlines = document.querySelector('.scanlines');
+
+    // Load preference
+    const isHidden = localStorage.getItem('scanlines_hidden') === 'true';
+    if (isHidden && scanlines) {
+        scanlines.style.display = 'none';
+        btn.style.opacity = '0.5';
+    }
+
+    if (btn && scanlines) {
+        btn.addEventListener('click', () => {
+            if (scanlines.style.display === 'none') {
+                scanlines.style.display = 'block';
+                btn.style.opacity = '1';
+                localStorage.setItem('scanlines_hidden', 'false');
+            } else {
+                scanlines.style.display = 'none';
+                btn.style.opacity = '0.5';
+                localStorage.setItem('scanlines_hidden', 'true');
+            }
+        });
+    }
+}
+
+function initSkills() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bars = entry.target.querySelectorAll('.skill-progress');
+                bars.forEach(bar => {
+                    const width = bar.getAttribute('data-width') || bar.style.width;
+                    if (!bar.getAttribute('data-width')) {
+                         // Transfer style width to data-width if needed
+                         bar.setAttribute('data-width', width);
+                         bar.style.width = '0';
+                    }
+                    // Small delay to ensure transition triggers
+                    setTimeout(() => {
+                        bar.style.width = bar.getAttribute('data-width');
+                    }, 100);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    const skillsSection = document.getElementById('skills-section');
+    if (skillsSection) observer.observe(skillsSection);
 }
 
 function updateLanguage() {

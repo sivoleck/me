@@ -21,14 +21,18 @@
     <canvas id="matrix-canvas"></canvas>
 
     <header>
-        <div class="logo" id="alias-trigger">SIVOLECK</div>
+        <div class="logo" id="alias-trigger">SIVOLECK<span class="cursor">_</span></div>
         <nav>
             <a href="#about-section" data-i18n="nav.about">[ABOUT]</a>
+            <a href="#skills-section" data-i18n="nav.skills">[SKILLS]</a>
             <a href="#projects-section" data-i18n="nav.projects">[PROJECTS]</a>
             <a href="#terminal-section" data-i18n="nav.terminal">[TERMINAL]</a>
             <a href="#arcade-section" data-i18n="nav.arcade">[ARCADE]</a>
+            <a href="#contact-section" data-i18n="nav.contact">[CONTACT]</a>
+            <button id="scanline-toggle" class="btn-retro"
+                style="padding: 0.2rem 0.5rem; font-size: 1rem; margin-left: 0.5rem;" title="Toggle Scanlines">[SCR]</button>
             <button id="lang-toggle" class="btn-retro"
-                style="padding: 0.2rem 0.5rem; font-size: 1rem; margin-left: 1rem;">[ES]</button>
+                style="padding: 0.2rem 0.5rem; font-size: 1rem; margin-left: 0.5rem;">[ES]</button>
         </nav>
     </header>
 
@@ -77,6 +81,49 @@
             self.break_things()
             self.fix_things()  <span class="comment" data-i18n="code.comment.sometimes"># a veces</span>
                 </pre>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION (Retro Style) -->
+        <section id="skills-section" class="skills">
+            <h2 class="section-title">&lt;Skills /&gt;</h2>
+            <div class="skills-container">
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">Python</span>
+                        <span class="skill-percentage">85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">JavaScript</span>
+                        <span class="skill-percentage">70%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="70%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">C++</span>
+                        <span class="skill-percentage">40%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="40%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">Linux / Bash</span>
+                        <span class="skill-percentage">75%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="75%"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -132,7 +179,7 @@ bot.run("TOKEN_ZANAHORIA")
 while (alive) {
   try {
     study();
-    <span class="comment" data-i18n="code.comment.useless">// Intentando procesar datos inútiles</span>   
+    <span class="comment" data-i18n="code.comment.useless">// Intentando procesar datos inútiles</span>
     if (Math.random() < 0.1) sleep();
     <span class="comment" data-i18n="code.comment.rare">// Raro, pero ocurre</span>
   } catch (err) {
@@ -141,7 +188,7 @@ while (alive) {
     <span class="comment" data-i18n="code.comment.tears">// Hidratando el teclado con lágrimas</span>
     eatCaffeine();
     <span class="comment" data-i18n="code.comment.patch">// Parche temporal (no arregla nada)</span>
-    motivation = motivation - 1; 
+    motivation = motivation - 1;
     if (motivation <= 0) {
       throw new Error(
         "Que sea lo que dios quiera"
@@ -202,9 +249,26 @@ while (alive) {
             </div>
         </section>
 
+        <!-- CONTACT SECTION -->
+        <section id="contact-section" class="contact">
+            <h2 class="section-title">&lt;Contact /&gt;</h2>
+            <div class="contact-box">
+                <p data-i18n="contact.intro">¿Quieres decirme algo o insultarme? Adelante.</p>
+                <div class="contact-links">
+                    <a href="https://github.com/sivoleck" target="_blank" class="contact-link">[GITHUB]</a>
+                    <a href="https://discord.com/users/sivolc01" target="_blank" class="contact-link">[DISCORD]</a>
+                    <a href="mailto:sivoleck@example.com" class="contact-link">[EMAIL]</a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer>
+        <div class="footer-stats">
+            <span class="visitor-counter" data-i18n="footer.visitors">Visitors:</span>
+            <span id="visit-count">...</span>
+        </div>
         <p class="hidden-msg" data-i18n="footer.truth">Press Ctrl+Shift+X for truth</p>
         <p>© 2026. <span data-i18n="footer.credits">Made with hatred & caffeine.</span></p>
     </footer>
