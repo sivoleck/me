@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initArcade();
     initEasterEggs();
     initMatrix();
+    initCustomCursor();
+    initParticles();
+    initScrollReveal();
+    initVisitorCounter();
 });
 
 /* --- 0. LANGUAGE SYSTEM --- */
@@ -44,6 +48,7 @@ const translations = {
             current: 'Actual:', next: '¿Siguiente?', streak: 'Racha:'
         },
         footer: { truth: 'Presiona Ctrl+Shift+X para la verdad', credits: 'Hecho con odio y cafeína.' },
+        counter: { title: 'REGISTRO DE VISITAS', text: 'humanos detectados en el sistema' },
         // Terminal Responses
         cmds: {
             help: `Comandos: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
@@ -108,6 +113,7 @@ const translations = {
             current: 'Current:', next: 'Next?', streak: 'Streak:'
         },
         footer: { truth: 'Press Ctrl+Shift+X for truth', credits: 'Made with hatred & caffeine.' },
+        counter: { title: 'VISITOR LOG', text: 'humans detected in the system' },
         // Terminal Responses
         cmds: {
             help: `Commands: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
@@ -466,6 +472,12 @@ function initEasterEggs() {
 /* --- 4. MATRIX EFFECT --- */
 let matrixInterval;
 
+function initMatrix() {
+    // Matrix effect is initialized but not started automatically
+    // It will be triggered by Konami code or 'matrix' terminal command
+    // No initialization needed, just a placeholder for the call in DOMContentLoaded
+}
+
 function startMatrixEffect() {
     const canvas = document.getElementById('matrix-canvas');
     if (!canvas) return;
@@ -511,4 +523,171 @@ function startMatrixEffect() {
         canvas.style.display = 'none';
         // Reload page logic or just hide? Just hide for now.
     }, 10000);
+}
+
+
+/* --- 5. CURSOR PERSONALIZADO --- */
+function initCustomCursor() {
+    const cursor = document.querySelector('.custom-cursor');
+    const cursorDot = document.querySelector('.custom-cursor-dot');
+    
+    if (!cursor || !cursorDot) return;
+    
+    // Check if it's mobile device
+    if (window.innerWidth <= 600) {
+        cursor.style.display = 'none';
+        cursorDot.style.display = 'none';
+        document.body.style.cursor = 'auto';
+        return;
+    }
+    
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    let dotX = 0, dotY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Dot follows instantly
+        dotX = mouseX;
+        dotY = mouseY;
+        cursorDot.style.left = dotX + 'px';
+        cursorDot.style.top = dotY + 'px';
+    });
+    
+    // Smooth cursor animation
+    function animateCursor() {
+        // Smooth follow with easing
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        
+        requestAnimationFrame(animateCursor);
+    }
+    
+    animateCursor();
+    
+    // Hover effect for interactive elements
+    const hoverElements = document.querySelectorAll('a, button, input, .card, .logo');
+    
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+        });
+    });
+}
+
+/* --- 6. PARTÍCULAS FLOTANTES --- */
+function initParticles() {
+    const container = document.getElementById('particles-container');
+    if (!container) return;
+    
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random position
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + 'vh';
+        
+        // Random animation delay
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        
+        // Random animation duration
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        
+        // Random color variation
+        const colors = ['var(--neon-cyan)', 'var(--neon-magenta)', 'var(--neon-violet)'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 3px ${color}`;
+        
+        container.appendChild(particle);
+    }
+}
+
+/* --- 7. SCROLL REVEAL ANIMATIONS --- */
+function initScrollReveal() {
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                // Optional: stop observing after reveal
+                // revealObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    revealElements.forEach(el => {
+        revealObserver.observe(el);
+    });
+}
+
+/* --- 8. CONTADOR DE VISITAS CON COUNTAPI --- */
+function initVisitorCounter() {
+    const countElement = document.getElementById('count-number');
+    if (!countElement) return;
+    
+    // Using CountAPI.xyz - Free visitor counter for static sites
+    // Format: https://api.countapi.xyz/hit/{namespace}/{key}
+    // Using GitHub repo name as namespace
+    const namespace = 'sivoleck-me';
+    const key = 'visits';
+    
+    const apiUrl = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+    
+    // Add loading animation
+    countElement.innerHTML = '<span style="animation: blink 1s infinite;">...</span>';
+    
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.value !== undefined) {
+                // Animate count up
+                animateCount(0, data.value, countElement, 2000);
+            } else {
+                countElement.textContent = '???';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching visitor count:', error);
+            countElement.textContent = 'ERROR';
+            countElement.style.fontSize = '1.5rem';
+        });
+}
+
+function animateCount(start, end, element, duration) {
+    const startTime = performance.now();
+    const range = end - start;
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (easeOutExpo)
+        const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        
+        const current = Math.floor(start + range * easeOut);
+        element.textContent = current.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
 }
