@@ -16,6 +16,13 @@
 <body>
     <div class="scanlines"></div>
     <div class="noise"></div>
+    
+    <!-- Cursor personalizado -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-dot"></div>
+    
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles-container"></div>
 
     <!-- Easter Egg: Matrix Rain Container (Hidden by default) -->
     <canvas id="matrix-canvas"></canvas>
@@ -54,7 +61,7 @@
         </section>
 
         <!-- ABOUT ME (Python Style) -->
-        <section id="about-section" class="about">
+        <section id="about-section" class="about reveal">
             <h2 class="section-title">&lt;About /&gt;</h2>
             <p class="intro-text" data-i18n="about.intro">No soy nadie especial. Solo alguien muy curioso y al que le
                 gusta resolver problemas.
@@ -81,7 +88,7 @@
         </section>
 
         <!-- PROJECTS & SNIPPETS -->
-        <section id="projects-section" class="projects">
+        <section id="projects-section" class="projects reveal">
             <h2 class="section-title">&lt;Projects /&gt;</h2>
             <div class="grid">
                 <!-- Card 1: Bot Discord -->
@@ -156,7 +163,7 @@ while (alive) {
         </section>
 
         <!-- INTERACTIVE TERMINAL -->
-        <section id="terminal-section" class="terminal-wrapper">
+        <section id="terminal-section" class="terminal-wrapper reveal">
             <div class="terminal-header">
                 <span>BASH - REMOTE</span>
                 <div class="controls">× − □</div>
@@ -174,7 +181,7 @@ while (alive) {
         </section>
 
         <!-- ARCADE ZONE (2 Modules) -->
-        <section id="arcade-section" class="arcade-zone">
+        <section id="arcade-section" class="arcade-zone reveal">
             <h2 class="section-title pixel-font">ARCADE ZONE</h2>
             <div class="arcade-grid">
                 <!-- Game 1: Guess the Number -->
@@ -203,6 +210,17 @@ while (alive) {
         </section>
 
     </main>
+
+    <!-- CONTADOR DE VISITAS -->
+    <div class="container">
+        <div class="visitor-counter reveal">
+            <h3 data-i18n="counter.title">VISITOR LOG</h3>
+            <div class="visitor-count" id="visitor-count">
+                <span id="count-number">...</span>
+            </div>
+            <p class="visitor-text" data-i18n="counter.text">humans detected in the system</p>
+        </div>
+    </div>
 
     <footer>
         <p class="hidden-msg" data-i18n="footer.truth">Press Ctrl+Shift+X for truth</p>
