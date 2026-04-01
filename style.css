@@ -559,6 +559,403 @@ footer {
     color: #333;
 }
 
+/* --- CURSOR PERSONALIZADO --- */
+body {
+    cursor: none;
+}
+
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px var(--neon-cyan);
+}
+
+.custom-cursor-dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--neon-magenta);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    box-shadow: 0 0 5px var(--neon-magenta);
+}
+
+.custom-cursor.hover {
+    transform: scale(1.5);
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 15px var(--neon-magenta), inset 0 0 15px var(--neon-magenta);
+}
+
+/* --- PARTÍCULAS DE FONDO --- */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float-particle 20s infinite linear;
+    box-shadow: 0 0 3px var(--neon-cyan);
+}
+
+@keyframes float-particle {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+    }
+}
+
+/* --- SCROLL REVEAL ANIMATIONS --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- EFECTOS DE NEÓN PULSANTE --- */
+@keyframes neon-pulse {
+    0%, 100% {
+        text-shadow: 
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px var(--neon-magenta),
+            0 0 42px var(--neon-magenta),
+            0 0 82px var(--neon-magenta),
+            0 0 92px var(--neon-magenta);
+    }
+    50% {
+        text-shadow: 
+            0 0 4px #fff,
+            0 0 7px #fff,
+            0 0 15px var(--neon-magenta),
+            0 0 30px var(--neon-magenta),
+            0 0 60px var(--neon-magenta),
+            0 0 70px var(--neon-magenta);
+    }
+}
+
+.logo {
+    animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes border-pulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 5px var(--neon-violet),
+            0 0 10px var(--neon-violet),
+            inset 0 0 5px var(--neon-violet);
+    }
+    50% {
+        box-shadow: 
+            0 0 10px var(--neon-violet),
+            0 0 20px var(--neon-violet),
+            inset 0 0 10px var(--neon-violet);
+    }
+}
+
+.badge {
+    animation: border-pulse 3s ease-in-out infinite;
+}
+
+/* --- TYPING EFFECT MEJORADO --- */
+.typing-text {
+    display: inline-block;
+    border-right: 3px solid var(--neon-cyan);
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    50% { border-color: transparent; }
+}
+
+/* --- HOVER EFFECTS MEJORADOS --- */
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+        var(--neon-cyan), 
+        var(--neon-magenta), 
+        var(--neon-violet),
+        var(--neon-cyan));
+    background-size: 400%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+    animation: gradient-rotate 3s linear infinite;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+@keyframes gradient-rotate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- EFECTOS DE ENTRADA PARA SECCIONES --- */
+@keyframes slide-in-right {
+    from {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.section-title {
+    animation: slide-in-right 0.8s ease-out;
+}
+
+.hero {
+    animation: fade-in 1s ease-out;
+}
+
+/* --- GLITCH EFFECT MEJORADO PARA HOVER --- */
+.glitch-hover {
+    position: relative;
+}
+
+.glitch-hover:hover {
+    animation: glitch-text 0.3s infinite;
+}
+
+@keyframes glitch-text {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* --- CONTADOR DE VISITAS --- */
+.visitor-counter {
+    margin: 3rem auto 2rem;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--neon-violet);
+    text-align: center;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.visitor-counter::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(157, 0, 255, 0.1),
+        transparent
+    );
+    animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.visitor-counter h3 {
+    font-family: var(--font-heading);
+    color: var(--neon-cyan);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.visitor-count {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--neon-magenta);
+    text-shadow: 
+        0 0 10px var(--neon-magenta),
+        0 0 20px var(--neon-magenta),
+        0 0 30px var(--neon-magenta);
+    position: relative;
+    z-index: 1;
+    animation: count-glow 2s ease-in-out infinite;
+}
+
+@keyframes count-glow {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.visitor-text {
+    font-family: var(--font-code);
+    color: var(--text-primary);
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- EFECTOS ADICIONALES --- */
+.btn-retro {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-retro::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-retro:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Mejorar el terminal con efecto de scan */
+.terminal-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--neon-cyan),
+        transparent
+    );
+    animation: terminal-scan 2s linear infinite;
+}
+
+@keyframes terminal-scan {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(300px);
+    }
+}
+
+.terminal-body {
+    position: relative;
+}
+
+/* --- EFECTOS DE CÓDIGO --- */
+.code-block {
+    position: relative;
+}
+
+.code-block::after {
+    content: '> EXECUTING...';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    opacity: 0.3;
+    font-family: var(--font-heading);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .glitch-title {
@@ -587,5 +984,18 @@ footer {
 
     .container {
         padding: 1rem;
+    }
+    
+    .custom-cursor,
+    .custom-cursor-dot {
+        display: none;
+    }
+    
+    body {
+        cursor: auto;
+    }
+    
+    .visitor-count {
+        font-size: 2rem;
     }
 }
