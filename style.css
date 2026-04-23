@@ -559,38 +559,10 @@ footer {
     color: #333;
 }
 
-/* --- CURSOR PERSONALIZADO --- */
-body {
-    cursor: none;
-}
-
-.custom-cursor {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--neon-cyan);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-    box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px var(--neon-cyan);
-}
-
+/* --- CURSOR PERSONALIZADO (desactivado) --- */
+.custom-cursor,
 .custom-cursor-dot {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: var(--neon-magenta);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    box-shadow: 0 0 5px var(--neon-magenta);
-}
-
-.custom-cursor.hover {
-    transform: scale(1.5);
-    border-color: var(--neon-magenta);
-    box-shadow: 0 0 15px var(--neon-magenta), inset 0 0 15px var(--neon-magenta);
+    display: none;
 }
 
 /* --- PARTÍCULAS DE FONDO --- */
@@ -984,15 +956,6 @@ body {
 
     .container {
         padding: 1rem;
-    }
-    
-    .custom-cursor,
-    .custom-cursor-dot {
-        display: none;
-    }
-    
-    body {
-        cursor: auto;
     }
     
     .visitor-count {
