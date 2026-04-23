@@ -590,23 +590,20 @@ function initVisitorCounter() {
     if (!countElement) return;
 
     // Using counterapi.dev - Free visitor counter
-    // Docs: https://counterapi.dev
-    const namespace = 'sivoleck-me';
-    const key = 'visits';
-
-    const apiUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
+    const apiUrl = 'https://api.counterapi.dev/v1/sivoleck-me/visits/up';
 
     // Add loading animation
     countElement.innerHTML = '<span style="animation: blink 1s infinite;">...</span>';
 
-    fetch(apiUrl)
+    fetch(apiUrl, { mode: 'cors' })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            const value = data.count ?? data.value ?? data.hits;
-            if (value !== undefined) {
+            // counterapi.dev returns { count: number }
+            const value = data.count ?? data.value ?? data.hits ?? data.views;
+            if (value !== undefined && value !== null) {
                 animateCount(0, value, countElement, 2000);
             } else {
                 countElement.textContent = '???';
@@ -614,8 +611,21 @@ function initVisitorCounter() {
         })
         .catch(error => {
             console.error('Error fetching visitor count:', error);
-            countElement.textContent = 'ERROR';
-            countElement.style.fontSize = '1.5rem';
+            // Fallback: try without /up (just read)
+            fetch('https://api.counterapi.dev/v1/sivoleck-me/visits', { mode: 'cors' })
+                .then(r => r.json())
+                .then(data => {
+                    const value = data.count ?? data.value ?? data.hits;
+                    if (value !== undefined) {
+                        animateCount(0, value, countElement, 2000);
+                    } else {
+                        countElement.textContent = '---';
+                    }
+                })
+                .catch(() => {
+                    countElement.textContent = '---';
+                    countElement.style.fontSize = '1.5rem';
+                });
         });
 }
 
