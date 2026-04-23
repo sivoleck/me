@@ -54,14 +54,14 @@ const translations = {
             help: `Comandos: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
             about: "Sivoleck. Lvl 16. Aprendiz de código. Odio bachillerato con pasión.",
             projects: "→ moon_bot.py (Status: En proceso... desde 2024)\n→ esta_web.html (Status: Funciona. Milagrosamente.)\n→ mi_vida.exe (Status: Runtime Error)",
-            skills: "→ Ctrl+C / Ctrl+V: ████████░░ 80%\n→ Googlear errores: ██████████ 100%\n→ Leer documentación: ██░░░░░░░░ 20%\n→ Dormir: ░░░░░░░░░░ 0%",
+            skills: "→ Ctrl+C / Ctrl+V: ████░░ 80%\n→ Googlear errores: ████ 100%\n→ Leer documentación: ██░░░░ 20%\n→ Dormir: ░░░░ 0%",
             whoami: "Un NPC con WiFi y problemas existenciales.",
             status: "Estado actual: Compilando excusas para no hacer tareas...",
             social: "Discord: sivolc01 (No me hables si eres un cocoa)",
             ping: "Pong! (Latencia: 999ms - Mi cerebro está lagueado)",
             sudo: "Permiso denegado. No eres el menda aquí.",
             rm: "Nice try. Pero no. 🙂",
-            hack: "Iniciando hackeo... [████░░░░░░] ERROR: Skill issues.",
+            hack: "Iniciando hackeo... [████░░░░] ERROR: Skill issues.",
             coffee: "☕ Generando cafeína virtual... Done. (No funciona igual)",
             sleep: "Modo hibernación activado. (Ojalá pudiera yo también)",
             motivate: ["Tu código es... interesante.", "Sigue así. O no. Da igual.", "Al menos compila. A veces.", "Eres único. Como todos los bugs."],
@@ -119,14 +119,14 @@ const translations = {
             help: `Commands: help, about, projects, skills, whoami, status, roll, flip, rps, glitch, sudo, rm, hack, coffee, sleep, motivate, insult, ls, cat, pwd, uptime, ps, kill, 42, rickroll, debug, why, how, when, credits, clear, history, time, date, weather, matrix, social, ping`,
             about: "Sivoleck. Lvl 16. Code apprentice. Hating High School with passion.",
             projects: "→ moon_bot.py (Status: WIP... since 2024)\n→ this_web.html (Status: Works. Miraculously.)\n→ my_life.exe (Status: Runtime Error)",
-            skills: "→ Ctrl+C / Ctrl+V: ████████░░ 80%\n→ Google Errors: ██████████ 100%\n→ Read Docs: ██░░░░░░░░ 20%\n→ Sleep: ░░░░░░░░░░ 0%",
+            skills: "→ Ctrl+C / Ctrl+V: ████░░ 80%\n→ Google Errors: ████ 100%\n→ Read Docs: ██░░░░ 20%\n→ Sleep: ░░░░ 0%",
             whoami: "An NPC with WiFi and existential dread.",
             status: "Current status: Compiling excuses to avoid homework...",
             social: "Discord: sivolc01 (Don't talk to me if you are a normie)",
             ping: "Pong! (Latency: 999ms - My brain is lagging)",
             sudo: "Permission denied. You have no power here.",
             rm: "Nice try. But no. 🙂",
-            hack: "Init hacking... [████░░░░░░] ERROR: Skill issues.",
+            hack: "Init hacking... [████░░░░] ERROR: Skill issues.",
             coffee: "☕ Generating virtual caffeine... Done. (Not the same)",
             sleep: "Hibernation mode ON. (I wish)",
             motivate: ["Your code is... interesting.", "Keep going. Or not.", "At least it compiles. Sometimes.", "You are unique. Like all bugs."],
@@ -528,60 +528,7 @@ function startMatrixEffect() {
 
 /* --- 5. CURSOR PERSONALIZADO --- */
 function initCustomCursor() {
-    const cursor = document.querySelector('.custom-cursor');
-    const cursorDot = document.querySelector('.custom-cursor-dot');
-    
-    if (!cursor || !cursorDot) return;
-    
-    // Check if it's mobile device
-    if (window.innerWidth <= 600) {
-        cursor.style.display = 'none';
-        cursorDot.style.display = 'none';
-        document.body.style.cursor = 'auto';
-        return;
-    }
-    
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let dotX = 0, dotY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Dot follows instantly
-        dotX = mouseX;
-        dotY = mouseY;
-        cursorDot.style.left = dotX + 'px';
-        cursorDot.style.top = dotY + 'px';
-    });
-    
-    // Smooth cursor animation
-    function animateCursor() {
-        // Smooth follow with easing
-        cursorX += (mouseX - cursorX) * 0.15;
-        cursorY += (mouseY - cursorY) * 0.15;
-        
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        
-        requestAnimationFrame(animateCursor);
-    }
-    
-    animateCursor();
-    
-    // Hover effect for interactive elements
-    const hoverElements = document.querySelectorAll('a, button, input, .card, .logo');
-    
-    hoverElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('hover');
-        });
-        
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('hover');
-        });
-    });
+    // Cursor personalizado desactivado
 }
 
 /* --- 6. PARTÍCULAS FLOTANTES --- */
@@ -637,28 +584,30 @@ function initScrollReveal() {
     });
 }
 
-/* --- 8. CONTADOR DE VISITAS CON COUNTAPI --- */
+/* --- 8. CONTADOR DE VISITAS CON COUNTERAPI --- */
 function initVisitorCounter() {
     const countElement = document.getElementById('count-number');
     if (!countElement) return;
-    
-    // Using CountAPI.xyz - Free visitor counter for static sites
-    // Format: https://api.countapi.xyz/hit/{namespace}/{key}
-    // Using GitHub repo name as namespace
+
+    // Using counterapi.dev - Free visitor counter
+    // Docs: https://counterapi.dev
     const namespace = 'sivoleck-me';
     const key = 'visits';
-    
-    const apiUrl = `https://api.countapi.xyz/hit/${namespace}/${key}`;
-    
+
+    const apiUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
+
     // Add loading animation
     countElement.innerHTML = '<span style="animation: blink 1s infinite;">...</span>';
-    
+
     fetch(apiUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
         .then(data => {
-            if (data && data.value !== undefined) {
-                // Animate count up
-                animateCount(0, data.value, countElement, 2000);
+            const value = data.count ?? data.value ?? data.hits;
+            if (value !== undefined) {
+                animateCount(0, value, countElement, 2000);
             } else {
                 countElement.textContent = '???';
             }
