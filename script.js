@@ -585,30 +585,20 @@ function initScrollReveal() {
 }
 
 /* --- 8. CONTADOR DE VISITAS --- */
-async function initVisitorCounter() {
+function initVisitorCounter() {
     const el = document.getElementById('count-number');
     if (!el) return;
 
-    // Pon un nombre único para que tu contador empiece de cero y sea solo tuyo
-    const id = 'sivoleck-cyber-log'; 
-    const url = `https://api.counterapi.dev/v1/${id}/visits/up`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // El número real de la base de datos
-        const realCount = data.count;
-
-        // Ejecutamos TU animación que ya tienes en script.js
-        // Esto hará que el número suba de 0 hasta el real con GLOW morado
-        animateCount(0, realCount, el, 2000);
-        
-    } catch (error) {
-        // Si el adblock lo bloquea, mostramos un número fijo para que no se rompa el diseño
-        el.innerText = "Adblock cocoa"; 
-        console.log("Error de conexión, usando valor estático.");
-    }
+    const username = 'sivoleck-cyber';
+    // Usamos el tema "rule34" que son solo números verdes digitales (muy hacker)
+    const tema = 'rule34'; 
+    
+    el.innerHTML = `
+        <img 
+            src="https://count.getloli.com/get/@${username}?theme=${tema}" 
+            alt="visitor counter" 
+            style="height: 50px; filter: hue-rotate(250deg) brightness(1.5) drop-shadow(0 0 8px #ff00ff);"
+        >`;
 }
 
 function animateCount(start, end, element, duration) {
