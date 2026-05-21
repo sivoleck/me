@@ -583,7 +583,7 @@ function initScrollReveal() {
         revealObserver.observe(el);
     });
 }
-console.log("Cocoa el que lea esto")
+console.log("Cocoa el que lea esto.")
 /* --- 8. CONTADOR DE VISITAS --- */
 function initVisitorCounter() {
     const el = document.getElementById('count-number');
