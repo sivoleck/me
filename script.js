@@ -591,7 +591,7 @@ function initVisitorCounter() {
 
     const username = 'sivoleck-cyber';
     // Usamos el tema "rule34" que son solo números verdes digitales (muy hacker)
-    const tema = 'rule34'; 
+    const tema = 'morden-num'; 
     
     el.innerHTML = `
         <img 
