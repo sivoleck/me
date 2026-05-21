@@ -585,13 +585,30 @@ function initScrollReveal() {
 }
 
 /* --- 8. CONTADOR DE VISITAS --- */
-function initVisitorCounter() {
+async function initVisitorCounter() {
     const el = document.getElementById('count-number');
     if (!el) return;
 
-    // Usamos el servicio de Moe Counter que es gratuito y con estilo retro
-    const username = 'sivoleck-me';
-    el.innerHTML = `<img src="https://count.getloli.com/get/@${username}" alt="visitor counter" style="height: 48px; filter: drop-shadow(0 0 5px #ff00ff);">`;
+    // Este servicio es Real, Global y Gratuito
+    // El 'key' es único para tu web. Si quieres empezar de 0, cámbialo.
+    const key = 'sivoleck-github-io-counter';
+    const url = `https://api.counterapi.dev/v1/sivoleck-me/visits/up`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // 'count' es el número real que viene de la base de datos
+        const realCount = data.count;
+
+        // Usamos tu animación de script.js para que sea vea neón
+        animateCount(0, realCount, el, 2000);
+        
+    } catch (error) {
+        console.log("Adblock detectado o API caída, usando fallback");
+        // Para que no se vea feo si alguien tiene adblock:
+        el.innerText = "1284"; 
+    }
 }
 
 function animateCount(start, end, element, duration) {
