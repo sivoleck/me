@@ -589,25 +589,25 @@ async function initVisitorCounter() {
     const el = document.getElementById('count-number');
     if (!el) return;
 
-    // Este servicio es Real, Global y Gratuito
-    // El 'key' es único para tu web. Si quieres empezar de 0, cámbialo.
-    const key = 'sivoleck-github-io-counter';
-    const url = `https://api.counterapi.dev/v1/sivoleck-me/visits/up`;
+    // Pon un nombre único para que tu contador empiece de cero y sea solo tuyo
+    const id = 'sivoleck-cyber-log'; 
+    const url = `https://api.counterapi.dev/v1/${id}/visits/up`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
         
-        // 'count' es el número real que viene de la base de datos
+        // El número real de la base de datos
         const realCount = data.count;
 
-        // Usamos tu animación de script.js para que sea vea neón
+        // Ejecutamos TU animación que ya tienes en script.js
+        // Esto hará que el número suba de 0 hasta el real con GLOW morado
         animateCount(0, realCount, el, 2000);
         
     } catch (error) {
-        console.log("Adblock detectado o API caída, usando fallback");
-        // Para que no se vea feo si alguien tiene adblock:
-        el.innerText = "1284"; 
+        // Si el adblock lo bloquea, mostramos un número fijo para que no se rompa el diseño
+        el.innerText = "Adblock cocoa"; 
+        console.log("Error de conexión, usando valor estático.");
     }
 }
 
