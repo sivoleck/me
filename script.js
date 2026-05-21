@@ -593,13 +593,13 @@ function initVisitorCounter() {
     // Usamos el tema "rule34" que son solo números verdes digitales (muy hacker)
     const tema = 'booru-lisu'; 
     
+    // Sin filtros (se verá verde original)
     el.innerHTML = `
         <img 
             src="https://count.getloli.com/get/@${username}?theme=${tema}" 
             alt="visitor counter" 
-            style="height: 80px;"
+            style="height: 100px; image-rendering: pixelated;"
         >`;
-}
 
 function animateCount(start, end, element, duration) {
     const startTime = performance.now();
