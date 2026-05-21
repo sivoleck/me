@@ -584,22 +584,25 @@ function initScrollReveal() {
     });
 }
 console.log("Cocoa el que lo lea.")
-/* --- 8. CONTADOR DE VISITAS --- */
 function initVisitorCounter() {
     const el = document.getElementById('count-number');
     if (!el) return;
 
-    const username = 'sivoleck-cyber01';
-    // Usamos el tema "rule34" que son solo números verdes digitales (muy hacker)
-    const tema = 'booru-lisu'; 
+    // Cambia esto para reiniciar a cero
+    const username = 'sivoleck-cyber-final'; 
+    const tema = 'rule34'; 
     
-    // Sin filtros (se verá verde original)
     el.innerHTML = `
         <img 
             src="https://count.getloli.com/get/@${username}?theme=${tema}" 
             alt="visitor counter" 
-            style="height: 100px; image-rendering: pixelated;"
+            style="
+                height: 100px; 
+                image-rendering: pixelated;
+                filter: hue-rotate(250deg) brightness(1.5) drop-shadow(0 0 10px #ff00ff);
+            "
         >`;
+}
 
 function animateCount(start, end, element, duration) {
     const startTime = performance.now();
