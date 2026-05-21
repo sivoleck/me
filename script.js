@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
     initVisitorCounter();
 });
-
+console.log("I")
 /* --- 0. LANGUAGE SYSTEM --- */
 let currentLang = 'es';
 
