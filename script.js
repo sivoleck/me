@@ -589,14 +589,14 @@ function initVisitorCounter() {
   const el = document.getElementById('count-number');
   if (!el) return;
 
-  const page = encodeURIComponent(location.hostname || 'sivoleck-me');
-  
-  // Usamos imagen en vez de fetch (más resistente a bloqueadores)
+  // Usamos un identificador único para tu web
+  const pageId = 'sivoleck-me';
+
   el.innerHTML = `
     <img 
-      src="https://visit-counter.vercel.app/counter.png?page=${page}" 
-      alt="Número de visitas" 
-      style="height: 50px; vertical-align: middle;"
+      src="https://visitor-badge.laobi.icu/badge?page_id=${pageId}" 
+      alt="Visitor counter" 
+      style="height: 48px; image-rendering: pixelated;"
     >
   `;
 }
