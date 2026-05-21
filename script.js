@@ -584,51 +584,30 @@ function initScrollReveal() {
     });
 }
 
-/* --- 8. CONTADOR DE VISITAS CON COUNTERAPI --- */
+/* --- 8. CONTADOR DE VISITAS --- */
 function initVisitorCounter() {
-    const countElement = document.getElementById('count-number');
-    if (!countElement) return;
+  const el = document.getElementById('count-number');
+  if (!el) return;
 
-    // Using counterapi.dev - Free visitor counter
-    const apiUrl = 'https://api.counterapi.dev/v1/sivoleck-me/visits/up';
+  const page = location.hostname || 'github-pages';
+  const urlText = `https://visit-counter.vercel.app/counter?page=${encodeURIComponent(page)}`;
+  const urlImg  = `https://visit-counter.vercel.app/counter.png?page=${encodeURIComponent(page)}`;
 
-    // Add loading animation
-    countElement.innerHTML = '<span style="animation: blink 1s infinite;">...</span>';
-
-    fetch(apiUrl, { mode: 'cors' })
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
-        .then(data => {
-            // counterapi.dev returns { count: number }
-            const value = data.count ?? data.value ?? data.hits ?? data.views;
-            if (value !== undefined && value !== null) {
-                animateCount(0, value, countElement, 2000);
-            } else {
-                countElement.textContent = '???';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching visitor count:', error);
-            // Fallback: try without /up (just read)
-            fetch('https://api.counterapi.dev/v1/sivoleck-me/visits', { mode: 'cors' })
-                .then(r => r.json())
-                .then(data => {
-                    const value = data.count ?? data.value ?? data.hits;
-                    if (value !== undefined) {
-                        animateCount(0, value, countElement, 2000);
-                    } else {
-                        countElement.textContent = '---';
-                    }
-                })
-                .catch(() => {
-                    countElement.textContent = '---';
-                    countElement.style.fontSize = '1.5rem';
-                });
-        });
+  fetch(urlText)
+    .then(r => r.text())
+    .then(txt => {
+      const n = parseInt(txt, 10);
+      if (Number.isFinite(n)) {
+        animateCount(0, n, el, 2000);
+      } else {
+        throw new Error('no numérico');
+      }
+    })
+    .catch(() => {
+      // Si falla, muestra imagen (no sufre CORS)
+      el.innerHTML = `<img src="${urlImg}" alt="visitor counter" style="height: 48px;">`;
+    });
 }
-
 function animateCount(start, end, element, duration) {
     const startTime = performance.now();
     const range = end - start;
