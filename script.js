@@ -586,19 +586,12 @@ function initScrollReveal() {
 
 /* --- 8. CONTADOR DE VISITAS --- */
 function initVisitorCounter() {
-  const el = document.getElementById('count-number');
-  if (!el) return;
+    const el = document.getElementById('count-number');
+    if (!el) return;
 
-  // Usamos un identificador único para tu web
-  const pageId = 'sivoleck-me';
-
-  el.innerHTML = `
-    <img 
-      src="https://visitor-badge.laobi.icu/badge?page_id=${pageId}" 
-      alt="Visitor counter" 
-      style="height: 48px; image-rendering: pixelated;"
-    >
-  `;
+    // Usamos el servicio de Moe Counter que es gratuito y con estilo retro
+    const username = 'sivoleck-me';
+    el.innerHTML = `<img src="https://count.getloli.com/get/@${username}" alt="visitor counter" style="height: 48px; filter: drop-shadow(0 0 5px #ff00ff);">`;
 }
 
 function animateCount(start, end, element, duration) {
