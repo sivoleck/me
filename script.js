@@ -596,7 +596,7 @@ function initVisitorCounter() {
             src="https://count.getloli.com/get/@${username}?theme=${tema}" 
             alt="visitor counter" 
             style="
-                height: 100px; 
+                height: 80px; 
                 image-rendering: pixelated;
                 filter: hue-rotate(250deg) brightness(1.5) drop-shadow(0 0 10px #ff00ff);
             "
