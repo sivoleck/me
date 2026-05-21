@@ -589,25 +589,18 @@ function initVisitorCounter() {
   const el = document.getElementById('count-number');
   if (!el) return;
 
-  const page = location.hostname || 'github-pages';
-  const urlText = `https://visit-counter.vercel.app/counter?page=${encodeURIComponent(page)}`;
-  const urlImg  = `https://visit-counter.vercel.app/counter.png?page=${encodeURIComponent(page)}`;
-
-  fetch(urlText)
-    .then(r => r.text())
-    .then(txt => {
-      const n = parseInt(txt, 10);
-      if (Number.isFinite(n)) {
-        animateCount(0, n, el, 2000);
-      } else {
-        throw new Error('no numérico');
-      }
-    })
-    .catch(() => {
-      // Si falla, muestra imagen (no sufre CORS)
-      el.innerHTML = `<img src="${urlImg}" alt="visitor counter" style="height: 48px;">`;
-    });
+  const page = encodeURIComponent(location.hostname || 'sivoleck-me');
+  
+  // Usamos imagen en vez de fetch (más resistente a bloqueadores)
+  el.innerHTML = `
+    <img 
+      src="https://visit-counter.vercel.app/counter.png?page=${page}" 
+      alt="Número de visitas" 
+      style="height: 50px; vertical-align: middle;"
+    >
+  `;
 }
+
 function animateCount(start, end, element, duration) {
     const startTime = performance.now();
     const range = end - start;
