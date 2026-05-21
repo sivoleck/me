@@ -582,7 +582,7 @@ function initScrollReveal() {
         revealObserver.observe(el);
     });
 }
-console.log("Cocoa el que lo lea.")
+console.log("Cocoa el que lo lea..")
 function initVisitorCounter() {
     const el = document.getElementById('count-number');
     if (!el) return;
