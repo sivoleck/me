@@ -5,50 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sivoleck | System.Root</title>
-    <!-- Fonts: 'VT323' (Pixel-like terminal) and 'JetBrains Mono' (Code) -->
+    <meta name="description" content="Sivoleck — sitio personal. Lvl 16. Aprendiz de código. Sobreviviendo el bachillerato.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=VT323&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- ── Overlays ─────────────────────────────────────── -->
     <div class="scanlines"></div>
     <div class="noise"></div>
-    
-    <!-- Cursor personalizado -->
+
+    <!-- ── Custom cursor ────────────────────────────────── -->
     <div class="custom-cursor"></div>
     <div class="custom-cursor-dot"></div>
-    
-    <!-- Partículas de fondo -->
+
+    <!-- ── Background particles ─────────────────────────── -->
     <div class="particles" id="particles-container"></div>
 
-    <!-- Easter Egg: Matrix Rain Container (Hidden by default) -->
+    <!-- ── Easter egg: Matrix Rain ──────────────────────── -->
     <canvas id="matrix-canvas"></canvas>
 
+    <!-- ── Easter egg: ZA WARUDO overlay ────────────────── -->
+    <div class="zawarudo-overlay" id="zawarudo-overlay">
+        <div class="zawarudo-text">ZA WARUDO!</div>
+        <div class="zawarudo-sub">時よ止まれ</div>
+    </div>
+
+    <!-- ── Easter egg: Eclipse overlay (Berserk) ────────── -->
+    <div class="eclipse-overlay" id="eclipse-overlay">
+        <div class="eclipse-circle"></div>
+        <div class="eclipse-text">THE ECLIPSE HAS BEGUN</div>
+    </div>
+
+    <!-- ── Easter egg: Hidden Brand of Sacrifice ─────────── -->
+    <img class="brand-of-sacrifice" id="brand-sacrifice" src="img/Brand2.png" alt="Brand of Sacrifice" title=" " />
+
+    <!-- ── Easter egg: Hidden Creeper ───────────────────── -->
+    <div class="creeper-face" id="creeper-face">
+        <div class="c-eyes">
+            <div class="c-eye"></div>
+            <div class="c-eye"></div>
+        </div>
+        <div class="c-nose"></div>
+        <div class="c-mouth">
+            <div class="c-mrow">
+                <div class="c-px dark"></div><div class="c-px"></div><div class="c-px"></div><div class="c-px dark"></div>
+            </div>
+            <div class="c-mrow">
+                <div class="c-px"></div><div class="c-px dark"></div><div class="c-px dark"></div><div class="c-px"></div>
+            </div>
+            <div class="c-mrow">
+                <div class="c-px dark"></div><div class="c-px"></div><div class="c-px"></div><div class="c-px dark"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Toast for secret clues ────────────────────────── -->
+    <div class="secret-toast" id="secret-toast"></div>
+
+    <!-- ── Sound toggle ──────────────────────────────────── -->
+    <button class="sound-toggle" id="sound-toggle" title="Toggle sound effects">🔊</button>
+
+    <!-- ── HEADER ────────────────────────────────────────── -->
     <header>
         <div class="logo" id="alias-trigger">SIVOLECK</div>
-        <nav>
-            <a href="#about-section" data-i18n="nav.about">[ABOUT]</a>
-            <a href="#projects-section" data-i18n="nav.projects">[PROJECTS]</a>
+        <nav id="main-nav">
+            <a href="#about-section" data-i18n="nav.about">[SOBRE MI]</a>
+            <a href="#projects-section" data-i18n="nav.projects">[PROYECTOS]</a>
+            <a href="#music-section" data-i18n="nav.music">[MÚSICA]</a>
+            <a href="#favorites-section" data-i18n="nav.favorites">[FAVORITOS]</a>
             <a href="#terminal-section" data-i18n="nav.terminal">[TERMINAL]</a>
+            <a href="#guestbook-section" data-i18n="nav.guestbook">[VISITAS]</a>
             <a href="#arcade-section" data-i18n="nav.arcade">[ARCADE]</a>
-            <button id="lang-toggle" class="btn-retro"
-                style="padding: 0.2rem 0.5rem; font-size: 1rem; margin-left: 1rem;">[ES]</button>
+            <button id="lang-toggle" class="btn-retro" style="padding:0.2rem 0.5rem;font-size:1rem;margin-left:1rem;">[ES]</button>
         </nav>
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
+    <!-- ── Mobile nav ────────────────────────────────────── -->
+    <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+        <a href="#about-section" data-i18n="nav.about">[SOBRE MI]</a>
+        <a href="#projects-section" data-i18n="nav.projects">[PROYECTOS]</a>
+        <a href="#music-section" data-i18n="nav.music">[MÚSICA]</a>
+        <a href="#favorites-section" data-i18n="nav.favorites">[FAVORITOS]</a>
+        <a href="#terminal-section" data-i18n="nav.terminal">[TERMINAL]</a>
+        <a href="#guestbook-section" data-i18n="nav.guestbook">[VISITAS]</a>
+        <a href="#arcade-section" data-i18n="nav.arcade">[ARCADE]</a>
+        <button id="lang-toggle-mobile" class="btn-retro" style="margin-top:1rem;width:fit-content;">[ES]</button>
+    </div>
+
     <main class="container">
-        <!-- HERO SECTION -->
+
+        <!-- ════════════════════════════════════════════════
+             HERO
+        ════════════════════════════════════════════════ -->
         <section class="hero">
             <h1 class="glitch-title" data-text="SIVOLECK">SIVOLECK</h1>
-            <!-- El alias cambiará con triple click -->
 
             <div class="console-box">
                 <span class="prompt">root@esp-server:~$</span>
-                <span class="typing-text" data-i18n="hero.typing">No soy nadie importante, pero aún así este sitio
-                    existe.</span>
+                <span class="typing-text" data-i18n="hero.typing">No soy nadie importante, pero aún así este sitio existe.</span>
             </div>
 
             <p class="subtitle" data-i18n="hero.subtitle">Sobreviviendo a Bachillerato</p>
@@ -60,12 +120,12 @@
             </div>
         </section>
 
-        <!-- ABOUT ME (Python Style) -->
+        <!-- ════════════════════════════════════════════════
+             ABOUT ME  (Python style)
+        ════════════════════════════════════════════════ -->
         <section id="about-section" class="about reveal">
             <h2 class="section-title">&lt;About /&gt;</h2>
-            <p class="intro-text" data-i18n="about.intro">No soy nadie especial. Solo alguien muy curioso y al que le
-                gusta resolver problemas.
-            </p>
+            <p class="intro-text" data-i18n="about.intro">No soy nadie especial. Solo alguien muy curioso y al que le gusta resolver problemas.</p>
             <div class="code-block">
                 <pre>
 <span class="keyword">class</span> <span class="class-name">Sivoleck</span>:
@@ -87,10 +147,13 @@
             </div>
         </section>
 
-        <!-- PROJECTS & SNIPPETS -->
+        <!-- ════════════════════════════════════════════════
+             PROJECTS
+        ════════════════════════════════════════════════ -->
         <section id="projects-section" class="projects reveal">
             <h2 class="section-title">&lt;Projects /&gt;</h2>
-            <div class="grid">
+            <div class="grid" id="projects-grid">
+
                 <!-- Card 1: Bot Discord -->
                 <div class="card">
                     <div class="card-header">
@@ -111,7 +174,7 @@ async def on_message(message):
                 "🥕 *consumida con éxito*"
                 )
         else:
-            <span class="comment" data-i18n="code.comment.ignore"></span># Ignorar al usuario</span>
+            <span class="comment" data-i18n="code.comment.ignore"># Ignorar al usuario</span>
             <span class="comment" data-i18n="code.comment.furniture"># como si fuera un mueble</span>
             return None
     except Exception as e:
@@ -123,12 +186,14 @@ async def on_message(message):
 bot.run("TOKEN_ZANAHORIA")
                         </pre>
                         <p>Status: <span class="error">RUNTIME ERROR</span></p>
-                        <p data-i18n="projects.card1.error">Causa: <span class="error">La coneja mordió algun
-                                cable</span></p>
+                        <p data-i18n="projects.card1.error">Causa: <span class="error">La coneja mordió algun cable</span></p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="project-link disabled" data-i18n="projects.link.soon">// enlace próximamente</a>
                     </div>
                 </div>
 
-                <!-- Card 2: Code Snippet Absurdo -->
+                <!-- Card 2: Code Snippet -->
                 <div class="card">
                     <div class="card-header">
                         <span class="dot"></span>
@@ -139,8 +204,8 @@ bot.run("TOKEN_ZANAHORIA")
 while (alive) {
   try {
     study();
-    <span class="comment" data-i18n="code.comment.useless">// Intentando procesar datos inútiles</span>   
-    if (Math.random() < 0.1) sleep();
+    <span class="comment" data-i18n="code.comment.useless">// Intentando procesar datos inútiles</span>
+    if (Math.random() &lt; 0.1) sleep();
     <span class="comment" data-i18n="code.comment.rare">// Raro, pero ocurre</span>
   } catch (err) {
     console.log(`Error: ${err.message}`);
@@ -148,8 +213,8 @@ while (alive) {
     <span class="comment" data-i18n="code.comment.tears">// Hidratando el teclado con lágrimas</span>
     eatCaffeine();
     <span class="comment" data-i18n="code.comment.patch">// Parche temporal (no arregla nada)</span>
-    motivation = motivation - 1; 
-    if (motivation <= 0) {
+    motivation = motivation - 1;
+    if (motivation &lt;= 0) {
       throw new Error(
         "Que sea lo que dios quiera"
       );
@@ -158,60 +223,435 @@ while (alive) {
 }
                         </pre>
                     </div>
+                    <div class="card-footer">
+                        <a href="#" class="project-link disabled" data-i18n="projects.link.soon">// enlace próximamente</a>
+                    </div>
                 </div>
-            </div>
+
+            </div><!-- /grid -->
         </section>
 
-        <!-- INTERACTIVE TERMINAL -->
+        <!-- ════════════════════════════════════════════════
+             MUSIC PLAYER  (Cassette Boombox)
+        ════════════════════════════════════════════════ -->
+        <section id="music-section" class="music-section reveal">
+            <h2 class="section-title">&lt;Music /&gt;</h2>
+
+            <div class="boombox">
+                <div class="boombox-body">
+
+                    <!-- Speaker Left -->
+                    <div class="speaker">
+                        <div class="speaker-grille">
+                            <div class="speaker-cone"></div>
+                        </div>
+                        <div class="speaker-dots">
+                            <span></span><span></span><span></span>
+                            <span></span><span></span><span></span>
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+
+                    <!-- Cassette Deck (center) -->
+                    <div class="cassette-deck">
+
+                        <!-- Now Playing row -->
+                        <div class="now-playing-row">
+                            <div class="album-art-frame">
+                                <img class="album-art" id="album-art" src="" alt="cover" onerror="this.style.display='none'">
+                                <div class="album-art-placeholder" id="album-art-placeholder">♪</div>
+                            </div>
+                            <div class="now-playing-info">
+                                <div class="np-label" data-i18n="music.nowPlaying">REPRODUCIENDO</div>
+                                <div class="np-title" id="track-title">--- NO TAPE ---</div>
+                                <div class="np-artist" id="track-artist">---</div>
+                            </div>
+                        </div>
+
+                        <!-- Cassette window with reels -->
+                        <div class="cassette-housing">
+                            <div class="cassette-window">
+                                <div class="reel left-reel" id="left-reel"></div>
+                                <div class="tape-path"><div class="tape-line"></div></div>
+                                <div class="reel right-reel" id="right-reel"></div>
+                            </div>
+                            <div class="cassette-label-strip">
+                                <span id="cassette-label-text" data-i18n="music.noTape">// SIN CINTA</span>
+                            </div>
+                        </div>
+
+                        <!-- VU meters -->
+                        <div class="vu-meters" id="vu-meters">
+                            <div class="vu-bar"></div><div class="vu-bar"></div>
+                            <div class="vu-bar"></div><div class="vu-bar"></div>
+                            <div class="vu-bar"></div><div class="vu-bar"></div>
+                            <div class="vu-bar"></div><div class="vu-bar"></div>
+                            <div class="vu-bar"></div><div class="vu-bar"></div>
+                        </div>
+
+                        <!-- Transport controls -->
+                        <div class="transport-controls">
+                            <button class="transport-btn" id="btn-prev"    title="Previous">⏮</button>
+                            <button class="transport-btn" id="btn-rewind"  title="Rewind">⏪</button>
+                            <button class="transport-btn play-btn" id="btn-play" title="Play / Pause">▶</button>
+                            <button class="transport-btn" id="btn-forward" title="Forward">⏩</button>
+                            <button class="transport-btn" id="btn-next"    title="Next">⏭</button>
+                        </div>
+
+                        <!-- Volume -->
+                        <div class="volume-row">
+                            <span class="vol-label">VOL</span>
+                            <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                            <span class="vol-label">MAX</span>
+                        </div>
+
+                    </div><!-- /cassette-deck -->
+
+                    <!-- Speaker Right -->
+                    <div class="speaker">
+                        <div class="speaker-grille">
+                            <div class="speaker-cone"></div>
+                        </div>
+                        <div class="speaker-dots">
+                            <span></span><span></span><span></span>
+                            <span></span><span></span><span></span>
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+
+                </div><!-- /boombox-body -->
+
+                <!-- Track list -->
+                <div class="track-list-panel">
+                    <div class="track-list-header" data-i18n="music.tracklist">// CANCIONES</div>
+                    <div class="track-list" id="track-list"></div>
+                </div>
+
+            </div><!-- /boombox -->
+
+            <audio id="audio-player" preload="none"></audio>
+        </section>
+
+        <!-- ════════════════════════════════════════════════
+             FAVORITES / INTERESTS
+        ════════════════════════════════════════════════ -->
+        <section id="favorites-section" class="favorites-section reveal">
+            <h2 class="section-title">&lt;Favorites /&gt;</h2>
+            <p class="intro-text" data-i18n="favorites.intro">Las cosas que hacen que valga la pena aguantar el bachillerato.</p>
+
+            <div class="favorites-grid">
+
+                <!-- Berserk -->
+                <div class="fav-card" id="fav-berserk">
+                    <div class="fav-card-inner">
+                        <div class="fav-card-front">
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#1a0000,#3d0000)">
+                                <img src="img/berserk.jpg" alt="Berserk" onerror="this.style.display='none'">
+                                <span class="fav-fallback-icon">⚔️</span>
+                            </div>
+                            <div class="fav-front-info">
+                                <h3>BERSERK</h3>
+                                <span class="fav-tag">MANGA</span>
+                            </div>
+                        </div>
+                        <div class="fav-card-back">
+                            <div>
+                                <h3>BERSERK</h3>
+                                <p data-i18n="favorites.berserk.desc">No soy alguien al que le guste leer, pero esta historia es increíble.</p>
+                            </div>
+                            <div>
+                                <span class="fav-tag">MANGA · DARK FANTASY</span>
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JoJo's Bizarre Adventure -->
+                <div class="fav-card" id="fav-jojo">
+                    <div class="fav-card-inner">
+                        <div class="fav-card-front">
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#0a001a,#200040)">
+                                <img src="img/jojos.jpg" alt="JoJo's" onerror="this.style.display='none'">
+                                <span class="fav-fallback-icon">⭐</span>
+                            </div>
+                            <div class="fav-front-info">
+                                <h3>JOJO'S</h3>
+                                <span class="fav-tag">MANGA/ANIME</span>
+                            </div>
+                        </div>
+                        <div class="fav-card-back">
+                            <div>
+                                <h3>JOJO'S BIZARRE ADVENTURE</h3>
+                                <p data-i18n="favorites.jojo.desc">No le tenía fe alguna, y me acabó encantando. Y si te lo preguntas, mi parte favorita es la 4 con diferencia.</p>
+                            </div>
+                            <div>
+                                <span class="fav-tag">MANGA · ANIME · ABSURDO</span>
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Return to Your Immortality -->
+                <div class="fav-card" id="fav-rtyi">
+                    <div class="fav-card-inner">
+                        <div class="fav-card-front">
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#001a0a,#003320)">
+                                <img src="img/to your eternity.jpg" alt="To Your Eternity" onerror="this.style.display='none'">
+                                <span class="fav-fallback-icon">🌙</span>
+                            </div>
+                            <div class="fav-front-info">
+                                <h3>TO YOUR ETERNITY</h3>
+                                <span class="fav-tag">MANGA/ANIME</span>
+                            </div>
+                        </div>
+                        <div class="fav-card-back">
+                            <div>
+                                <h3>TO YOUR ETERNITY</h3>
+                                <p data-i18n="favorites.rtyi.desc">Me encanta cómo evoluciona el personaje de Inmo, además de todos sus momentos emocionales.</p>
+                            </div>
+                            <div>
+                                <span class="fav-tag">DONGHUA · XIANXIA</span>
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minecraft -->
+                <div class="fav-card" id="fav-minecraft">
+                    <div class="fav-card-inner">
+                        <div class="fav-card-front">
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#0a1a00,#1a3a00)">
+                                <img src="img/minecraft.jpg" alt="Minecraft" onerror="this.style.display='none'">
+                                <span class="fav-fallback-icon">⛏️</span>
+                            </div>
+                            <div class="fav-front-info">
+                                <h3>MINECRAFT</h3>
+                                <span class="fav-tag">GAME</span>
+                            </div>
+                        </div>
+                        <div class="fav-card-back">
+                            <div>
+                                <h3>MINECRAFT</h3>
+                                <p data-i18n="favorites.minecraft.desc">Dudo que te sorprenda, pero me encanta la redstone.</p>
+                            </div>
+                            <div>
+                                <span class="fav-tag">GAME · SANDBOX</span>
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call of War -->
+                <div class="fav-card" id="fav-cow">
+                    <div class="fav-card-inner">
+                        <div class="fav-card-front">
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#1a1200,#332400)">
+                                <img src="img/callofwar.jpg" alt="Call of War" onerror="this.style.display='none'">
+                                <span class="fav-fallback-icon">🎖️</span>
+                            </div>
+                            <div class="fav-front-info">
+                                <h3>CALL OF WAR</h3>
+                                <span class="fav-tag">GAME</span>
+                            </div>
+                        </div>
+                        <div class="fav-card-back">
+                            <div>
+                                <h3>CALL OF WAR</h3>
+                                <p data-i18n="favorites.cow.desc">Estrategia global en tiempo real. Ejércitos y muchas traiciones... Si alguna vez quieres echar una partida, no dudes en invitarme.</p>
+                            </div>
+                            <div>
+                                <span class="fav-tag">GAME · STRATEGY · RTS</span>
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- League of Legends -->  
+                <div class="fav-card" id="fav-lol">  
+                    <div class="fav-card-inner">  
+                        <div class="fav-card-front">  
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#00101a,#002040)">  
+                                <img src="img/lol.jpg" alt="League of Legends" onerror="this.style.display='none'">  
+                                <span class="fav-fallback-icon">⚔️</span>  
+                            </div>  
+                            <div class="fav-front-info">  
+                                <h3>LEAGUE OF LEGENDS</h3>  
+                                <span class="fav-tag">GAME</span>  
+                            </div>  
+                        </div>  
+                        <div class="fav-card-back">  
+                            <div>  
+                                <h3>LEAGUE OF LEGENDS</h3>  
+                                <p data-i18n="favorites.lol.desc">A veces me pregunto como es que cai tan bajo...</p>  
+                            </div>  
+                            <div>  
+                                <span class="fav-tag">GAME · MOBA</span>  
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>  
+                            </div>  
+                        </div>  
+                    </div>  
+                </div>  
+                
+                <!-- Undertale -->  
+                <div class="fav-card" id="fav-undertale">  
+                    <div class="fav-card-inner">  
+                        <div class="fav-card-front">  
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#0a0a0a,#1a1a2e)">  
+                                <img src="img/undertale.jpg" alt="Undertale" onerror="this.style.display='none'">  
+                                <span class="fav-fallback-icon">❤️</span>  
+                            </div>  
+                            <div class="fav-front-info">  
+                                <h3>UNDERTALE</h3>  
+                                <span class="fav-tag">GAME</span>  
+                            </div>  
+                        </div>  
+                        <div class="fav-card-back">  
+                            <div>  
+                                <h3>UNDERTALE</h3>  
+                                <p data-i18n="favorites.undertale.desc">Obra maestra, si me preguntan. Aunque me arrepiento de haberme comido tantos spoilers antes de jugarlo.</p>
+                            </div>  
+                            <div>  
+                                <span class="fav-tag">GAME · RPG · INDIE</span>  
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>  
+                            </div>  
+                        </div>  
+                    </div>  
+                </div>  
+                
+                <!-- DOOM -->  
+                <div class="fav-card" id="fav-doom">  
+                    <div class="fav-card-inner">  
+                        <div class="fav-card-front">  
+                            <div class="fav-img-area" style="background:linear-gradient(135deg,#1a0000,#3a0000)">  
+                                <img src="img/doom.jpg" alt="DOOM" onerror="this.style.display='none'">  
+                                <span class="fav-fallback-icon">💀</span>  
+                            </div>  
+                            <div class="fav-front-info">  
+                                <h3>DOOM</h3>  
+                                <span class="fav-tag">GAME</span>  
+                            </div>  
+                        </div>  
+                        <div class="fav-card-back">  
+                            <div>  
+                                <h3>DOOM</h3>  
+                                <p data-i18n="favorites.doom.desc">Mi primera introduccion al mundo del FPS, cuando le revente la cabeza al primer demonio entendi que ese era mi juego.</p>  
+                            </div>  
+                            <div>  
+                                <span class="fav-tag">GAME · FPS </span>  
+                                <div class="fav-menacing">ゴゴゴゴゴ</div>  
+                            </div>  
+                        </div>  
+                    </div>  
+                </div>
+
+            </div><!-- /favorites-grid -->
+        </section>
+
+        <!-- ════════════════════════════════════════════════
+             INTERACTIVE TERMINAL
+        ════════════════════════════════════════════════ -->
         <section id="terminal-section" class="terminal-wrapper reveal">
             <div class="terminal-header">
-                <span>BASH - REMOTE</span>
+                <span>BASH — REMOTE // SIVOLECK_OS v2.0</span>
                 <div class="controls">× − □</div>
             </div>
             <div class="terminal-body" id="terminal-output">
-                <p data-i18n="terminal.welcome">Welcome to SIVOLECK_OS v1.0</p>
-                <p><span data-i18n="terminal.type">Type</span> <span class="highlight">'help'</span> <span
-                        data-i18n="terminal.forhelp">to see available commands.</span></p>
-                <!-- Output dinámico aquí -->
+                <p data-i18n="terminal.welcome">Welcome to SIVOLECK_OS v2.0</p>
+                <p><span data-i18n="terminal.type">Escribe</span> <span class="highlight">'help'</span> <span data-i18n="terminal.forhelp">para ver comandos.</span></p>
             </div>
             <div class="input-line">
                 <span class="prompt">guest@web:~$</span>
-                <input type="text" id="terminal-input" autocomplete="off">
+                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false">
             </div>
         </section>
 
-        <!-- ARCADE ZONE (2 Modules) -->
+        <!-- ════════════════════════════════════════════════
+             GUESTBOOK
+        ════════════════════════════════════════════════ -->
+        <section id="guestbook-section" class="guestbook-section reveal">
+            <h2 class="section-title">&lt;Guestbook /&gt;</h2>
+            <p class="intro-text" data-i18n="guestbook.intro">Deja tu huella en el sistema.</p>
+
+            <!-- Language tabs -->
+            <div class="gb-tabs">
+                <button class="gb-tab active" data-lang="es">[ES]</button>
+                <button class="gb-tab" data-lang="en">[EN]</button>
+            </div>
+
+            <!-- Messages display -->
+            <div class="gb-messages" id="gb-messages">
+                <p class="gb-empty" data-i18n="guestbook.empty">// Sin mensajes aún. Sé el primero.</p>
+            </div>
+
+            <!-- Form  ─  replace YOUR_FORM_ID with your Formspree form ID -->
+            <form class="gb-form" id="guestbook-form"
+                  action="https://formspree.io/f/mvznlqza"
+                  method="POST">
+                <div class="gb-input-row">
+                    <span class="prompt">guest@web:~$</span>
+                    <input type="text" name="alias" id="gb-alias"
+                           placeholder="tu_alias" maxlength="30" required autocomplete="off">
+                </div>
+                <textarea name="message" id="gb-message"
+                          placeholder="> escribe tu mensaje aquí..."
+                          maxlength="300" required></textarea>
+                <input type="hidden" name="language" id="gb-language" value="es">
+                <input type="hidden" name="_subject" value="New Guestbook Message — Sivoleck">
+                <div class="gb-form-footer">
+                    <span class="gb-char-count"><span id="gb-char-remaining">300</span> chars left</span>
+                    <button type="submit" class="btn-retro" id="gb-submit" data-i18n="guestbook.send">ENVIAR MSG</button>
+                </div>
+            </form>
+            <div class="gb-status" id="gb-status"></div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════
+             ARCADE ZONE
+        ════════════════════════════════════════════════ -->
         <section id="arcade-section" class="arcade-zone reveal">
             <h2 class="section-title pixel-font">ARCADE ZONE</h2>
             <div class="arcade-grid">
+
                 <!-- Game 1: Guess the Number -->
                 <div class="game-module">
                     <h3 data-i18n="arcade.game1.title">MALDICIONES A BACH</h3>
                     <p class="game-sub" data-i18n="arcade.game1.subtitle">¿Cuántas veces hoy? (0-20)</p>
-                    <p class="score-display"><span data-i18n="arcade.attempts">Intentos:</span> <span
-                            id="prime-counter">0</span></p>
-                    <input type="number" id="guess-input" placeholder="??">
-                    <button id="guess-btn" class="btn-retro" data-i18n="arcade.guess">GUESS</button>
+                    <p class="score-display">
+                        <span data-i18n="arcade.attempts">Intentos:</span>
+                        <span id="prime-counter">0</span>
+                    </p>
+                    <input type="number" id="guess-input" placeholder="??" min="0" max="20">
+                    <button id="guess-btn" class="btn-retro" data-i18n="arcade.guess">ADIVINA</button>
                     <div id="game-feedback" class="feedback-msg"></div>
                 </div>
 
                 <!-- Game 2: Prime Chain -->
                 <div class="game-module">
                     <h3 data-i18n="arcade.game2.title">CADENA DE PRIMOS</h3>
-                    <p class="game-sub"><span data-i18n="arcade.current">Actual:</span> <span
-                            id="current-prime">2</span> → <span data-i18n="arcade.next">¿Siguiente?</span></p>
-                    <p class="score-display"><span data-i18n="arcade.streak">Racha:</span> <span
-                            id="prime-streak">0</span></p>
-                    <input type="number" id="prime-input" placeholder="??">
+                    <p class="game-sub">
+                        <span data-i18n="arcade.current">Actual:</span>
+                        <span id="current-prime">2</span> →
+                        <span data-i18n="arcade.next">¿Siguiente?</span>
+                    </p>
+                    <p class="score-display">
+                        <span data-i18n="arcade.streak">Racha:</span>
+                        <span id="prime-streak">0</span>
+                    </p>
+                    <input type="number" id="prime-input" placeholder="??" min="2">
                     <button id="prime-btn" class="btn-retro">CHECK</button>
                     <div id="prime-feedback" class="feedback-msg"></div>
                 </div>
+
             </div>
         </section>
 
-    </main>
+    </main><!-- /container -->
 
-    <!-- CONTADOR DE VISITAS -->
+    <!-- ── Visitor Counter ───────────────────────────────── -->
     <div class="container">
         <div class="visitor-counter reveal">
             <h3 data-i18n="counter.title">VISITOR LOG</h3>
@@ -222,14 +662,12 @@ while (alive) {
         </div>
     </div>
 
+    <!-- ── Footer ────────────────────────────────────────── -->
     <footer>
-        <p class="hidden-msg" data-i18n="footer.truth">Press Ctrl+Shift+X for truth</p>
-        <p>© 2026. <span data-i18n="footer.credits">Made with hatred & caffeine.</span></p>
+        <p class="hidden-msg" data-i18n="footer.truth">Presiona Ctrl+Shift+X para la verdad</p>
+        <p>© 2026. <span data-i18n="footer.credits">Hecho con odio y cafeína.</span></p>
     </footer>
-
-    <!-- Audio Effects (Optional sources needed, using placeholders or JS generation) -->
 
     <script src="script.js"></script>
 </body>
-
 </html>

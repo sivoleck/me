@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — The Abyss | Sivoleck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── CSS VARIABLES ── */
+    :root {
+      --bg-color:       #080808;
+      --neon-violet:    #9d00ff;
+      --neon-magenta:   #ff00ff;
+      --neon-cyan:      #00f3ff;
+      --error-red:      #ff3333;
+      --eclipse-deep:   #8B0000;
+      --eclipse-flame:  #FF4500;
+      --eclipse-amber:  #FF8C00;
+      --dim-text:       #444455;
+      --mid-text:       #666688;
+    }
+
+    /* ── RESET & BASE ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-color);
+      font-family: 'JetBrains Mono', monospace;
+      color: #ccc;
+    }
+
+    /* ── CANVAS LAYER (particles) ── */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── CRT SCANLINES OVERLAY ── */
+    .crt-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.18) 3px,
+        rgba(0, 0, 0, 0.18) 4px
+      );
+      animation: crt-flicker 8s infinite;
+    }
+
+    @keyframes crt-flicker {
+      0%, 97%, 100% { opacity: 1; }
+      97.5%          { opacity: 0.85; }
+      98%            { opacity: 1; }
+      98.5%          { opacity: 0.7; }
+      99%            { opacity: 1; }
+    }
+
+    /* ── VIGNETTE ── */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(0,0,0,0.55) 70%,
+        rgba(0,0,0,0.92) 100%
+      );
+    }
+
+    /* ── MAIN WRAPPER ── */
+    .void {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* ══════════════════════════════
+       ECLIPSE ANIMATION
+    ══════════════════════════════ */
+    .eclipse-wrap {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin-bottom: 44px;
+      flex-shrink: 0;
+    }
+
+    /* Outer atmospheric glow */
+    .eclipse-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -70px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at center,
+        transparent 48%,
+        rgba(139, 0, 0, 0.12) 58%,
+        rgba(255, 69, 0, 0.18) 65%,
+        rgba(255, 140, 0, 0.12) 72%,
+        transparent 85%
+      );
+      animation: halo-breathe 4s ease-in-out infinite;
+    }
+
+    /* Mid corona ring */
+    .eclipse-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -28px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at center,
+        transparent 55%,
+        rgba(139, 0, 0, 0.25) 62%,
+        rgba(255, 69, 0, 0.60) 70%,
+        rgba(255, 140, 0, 0.35) 75%,
+        rgba(255, 69, 0, 0.10) 82%,
+        transparent 90%
+      );
+      animation: corona-rotate 12s linear infinite, halo-breathe 4s ease-in-out infinite;
+      filter: blur(2px);
+    }
+
+    /* The eclipse disc itself */
+    .eclipse {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%,
+        #0d0005 0%,
+        #060008 40%,
+        #030003 100%
+      );
+      box-shadow:
+        0 0  18px 4px  rgba(255, 69, 0,  0.50),
+        0 0  40px 10px rgba(139, 0, 0,   0.60),
+        0 0  80px 20px rgba(139, 0, 0,   0.30),
+        0 0 140px 40px rgba(80,  0, 0,   0.20),
+        inset 0 0 30px 8px rgba(80, 0, 20, 0.8);
+      animation: eclipse-pulse 4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    /* Flame wisps on the edge */
+    .eclipse-flame-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: transparent;
+      border: 3px solid transparent;
+      box-shadow:
+        0 0  8px 4px  rgba(255, 140, 0, 0.7),
+        0 0 20px 6px  rgba(255, 69,  0, 0.5),
+        0 0 40px 12px rgba(139, 0,   0, 0.4);
+      animation: eclipse-pulse 4s ease-in-out infinite, flame-flicker 0.15s ease-in-out infinite alternate;
+      z-index: 3;
+    }
+
+    /* Inner void core shimmer */
+    .eclipse-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center,
+        rgba(60, 0, 80, 0.4) 0%,
+        transparent 70%
+      );
+      animation: core-pulse 3s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    /* Brand of Sacrifice style mark */
+    .brand {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      z-index: 4;
+      opacity: 0;
+      animation: brand-appear 6s ease-in-out infinite;
+    }
+
+    .brand svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 6px rgba(255,69,0,0.9)) drop-shadow(0 0 14px rgba(139,0,0,0.7));
+    }
+
+    @keyframes halo-breathe {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.06); }
+    }
+
+    @keyframes corona-rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes eclipse-pulse {
+      0%, 100% {
+        box-shadow:
+          0 0  18px 4px  rgba(255, 69, 0,  0.50),
+          0 0  40px 10px rgba(139, 0, 0,   0.60),
+          0 0  80px 20px rgba(139, 0, 0,   0.30),
+          0 0 140px 40px rgba(80,  0, 0,   0.20),
+          inset 0 0 30px 8px rgba(80, 0, 20, 0.8);
+      }
+      50% {
+        box-shadow:
+          0 0  28px 8px  rgba(255, 100, 0, 0.70),
+          0 0  60px 18px rgba(200, 0,   0, 0.75),
+          0 0 110px 30px rgba(139, 0,   0, 0.45),
+          0 0 180px 60px rgba(100, 0,   0, 0.30),
+          inset 0 0 40px 12px rgba(100, 0, 30, 0.9);
+      }
+    }
+
+    @keyframes flame-flicker {
+      0%   { opacity: 0.85; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes core-pulse {
+      0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
+      50%       { opacity: 0.7; transform: translate(-50%,-50%) scale(1.4); }
+    }
+
+    @keyframes brand-appear {
+      0%, 30%  { opacity: 0; }
+      40%, 60% { opacity: 0.8; }
+      70%, 100%{ opacity: 0; }
+    }
+
+    /* ══════════════════════════════
+       GLITCH 404 TITLE
+    ══════════════════════════════ */
+    .title-404 {
+      font-family: 'VT323', monospace;
+      font-size: clamp(7rem, 18vw, 13rem);
+      line-height: 0.85;
+      letter-spacing: 0.06em;
+      color: #fff;
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.4),
+        0 0 30px rgba(255, 69, 0, 0.5),
+        0 0 60px rgba(139, 0, 0, 0.4);
+      position: relative;
+      display: inline-block;
+      animation: glitch-shift 4s steps(1) infinite;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    .title-404::before,
+    .title-404::after {
+      content: '404';
+      position: absolute;
+      inset: 0;
+      font-family: 'VT323', monospace;
+      font-size: inherit;
+      letter-spacing: inherit;
+    }
+
+    .title-404::before {
+      color: var(--error-red);
+      clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+      transform: translateX(-4px);
+      opacity: 0;
+      animation: glitch-red 4s steps(1) infinite;
+      text-shadow: 0 0 20px var(--error-red);
+    }
+
+    .title-404::after {
+      color: var(--neon-cyan);
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+      transform: translateX(4px);
+      opacity: 0;
+      animation: glitch-cyan 4s steps(1) infinite;
+      text-shadow: 0 0 20px var(--neon-cyan);
+    }
+
+    @keyframes glitch-shift {
+      0%,  88%,  91%,  94%,  100% { transform: none; filter: none; }
+      89%  { transform: translateX(-3px) skewX(-2deg); filter: brightness(1.3); }
+      90%  { transform: translateX(3px)  skewX(2deg); }
+      92%  { transform: translateX(-2px); }
+      93%  { transform: translateX(0); }
+    }
+
+    @keyframes glitch-red {
+      0%, 88%, 91%, 100% { opacity: 0; clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); transform: translateX(-4px); }
+      89% { opacity: 1; clip-path: polygon(0 15%, 100% 15%, 100% 38%, 0 38%); transform: translateX(-6px); }
+      90% { opacity: 1; clip-path: polygon(0 55%, 100% 55%, 100% 70%, 0 70%); transform: translateX(-3px); }
+    }
+
+    @keyframes glitch-cyan {
+      0%, 88%, 91%, 100% { opacity: 0; clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%); transform: translateX(4px); }
+      89% { opacity: 1; clip-path: polygon(0 62%, 100% 62%, 100% 78%, 0 78%); transform: translateX(6px); }
+      90% { opacity: 1; clip-path: polygon(0 25%, 100% 25%, 100% 38%, 0 38%); transform: translateX(3px); }
+    }
+
+    /* ══════════════════════════════
+       TEXT CONTENT
+    ══════════════════════════════ */
+    .subtitle {
+      font-family: 'VT323', monospace;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      color: var(--neon-magenta);
+      letter-spacing: 0.12em;
+      text-shadow:
+        0 0 8px rgba(255, 0, 255, 0.8),
+        0 0 20px rgba(255, 0, 255, 0.4);
+      margin-bottom: 10px;
+      animation: text-flicker 6s infinite;
+    }
+
+    .description {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.65rem, 1.8vw, 0.85rem);
+      color: var(--mid-text);
+      letter-spacing: 0.05em;
+      text-align: center;
+      max-width: 500px;
+      margin-bottom: 40px;
+      padding: 0 20px;
+    }
+
+    @keyframes text-flicker {
+      0%, 94%, 96%, 98%, 100% { opacity: 1; }
+      95% { opacity: 0.6; }
+      97% { opacity: 0.85; }
+    }
+
+    /* ══════════════════════════════
+       RETURN BUTTON
+    ══════════════════════════════ */
+    .return-btn {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      padding: 12px 32px;
+      border: 1px solid var(--neon-cyan);
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+      box-shadow:
+        0 0  8px rgba(0, 243, 255, 0.3),
+        inset 0 0 8px rgba(0, 243, 255, 0.05);
+      margin-bottom: 60px;
+    }
+
+    .return-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--neon-cyan);
+      transform: translateX(-102%);
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+
+    .return-btn:hover {
+      color: var(--bg-color);
+      box-shadow:
+        0 0 16px rgba(0, 243, 255, 0.8),
+        0 0 40px rgba(0, 243, 255, 0.4),
+        inset 0 0 16px rgba(0, 243, 255, 0.2);
+    }
+
+    .return-btn:hover::before {
+      transform: translateX(0);
+    }
+
+    .return-btn .corner {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-color: var(--neon-cyan);
+      border-style: solid;
+    }
+    .return-btn .corner.tl { top: -1px; left: -1px;  border-width: 2px 0 0 2px; }
+    .return-btn .corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .return-btn .corner.bl { bottom: -1px; left: -1px;  border-width: 0 0 2px 2px; }
+    .return-btn .corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    /* ══════════════════════════════
+       CRYPTIC QUOTE
+    ══════════════════════════════ */
+    .quote {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.56rem, 1.4vw, 0.7rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #2a2a3a;
+      letter-spacing: 0.04em;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 20;
+      animation: quote-breathe 8s ease-in-out infinite;
+    }
+
+    @keyframes quote-breathe {
+      0%, 100% { color: #2a2a3a; }
+      50%       { color: #3d2040; }
+    }
+
+    /* ══════════════════════════════
+       AMBIENT FLOOR GLOW
+    ══════════════════════════════ */
+    .floor-glow {
+      position: fixed;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60vw;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        rgba(139, 0, 0, 0.12) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 480px) {
+      .eclipse-wrap {
+        width: 180px;
+        height: 180px;
+        margin-bottom: 30px;
+      }
+      .eclipse-wrap::before { inset: -50px; }
+      .eclipse-wrap::after  { inset: -20px; }
+      .eclipse-flame-ring   { inset: -4px; }
+      .description { font-size: 0.7rem; }
+      .quote {
+        white-space: normal;
+        text-align: center;
+        padding: 0 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particle-canvas"></canvas>
+  <div class="crt-overlay"></div>
+  <div class="vignette"></div>
+  <div class="floor-glow"></div>
+
+  <main class="void">
+
+    <div class="eclipse-wrap">
+      <div class="eclipse"></div>
+      <div class="eclipse-flame-ring"></div>
+      <div class="eclipse-core"></div>
+      <div class="brand">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#FF4500" stroke-width="1.5" opacity="0.9"/>
+          <line x1="24" y1="4"  x2="24" y2="44" stroke="#FF4500" stroke-width="1.2" opacity="0.8"/>
+          <line x1="4"  y1="24" x2="44" y2="24" stroke="#FF4500" stroke-width="1.2" opacity="0.8"/>
+          <circle cx="24" cy="24" r="3" fill="#FF8C00" opacity="0.95"/>
+          <circle cx="24" cy="8"  r="1.5" fill="#FF4500"/>
+          <circle cx="24" cy="40" r="1.5" fill="#FF4500"/>
+          <circle cx="8"  cy="24" r="1.5" fill="#FF4500"/>
+          <circle cx="40" cy="24" r="1.5" fill="#FF4500"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="title-404">404</h1>
+    <p class="subtitle">You have entered the Abyss.</p>
+    <p class="description">Error 404 — This page does not exist in this dimension.</p>
+
+    <a href="index.html" class="return-btn">
+      <span class="corner tl"></span>
+      <span class="corner tr"></span>
+      <span class="corner bl"></span>
+      <span class="corner br"></span>
+      Return to Reality &rarr;
+    </a>
+
+  </main>
+
+  <div class="quote">
+    &ldquo;The darkness is not empty. It is full of things that should not be.&rdquo;
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var canvas = document.getElementById('particle-canvas');
+    var ctx    = canvas.getContext('2d');
+
+    var COLORS = [
+      'rgba(139,  0,   0,  ',
+      'rgba(255,  69,  0,  ',
+      'rgba(180,  0,   0,  ',
+      'rgba(255,   0, 255, ',
+      'rgba(80,   0,  120, ',
+      'rgba(20,   0,   40, ',
+      'rgba(255, 140,   0, ',
+    ];
+
+    var W, H, particles;
+    var COUNT = 120;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function createParticle() {
+      var colorBase = COLORS[Math.floor(Math.random() * COLORS.length)];
+      var alpha     = rand(0.15, 0.7);
+      return {
+        x:      rand(0, W),
+        y:      rand(0, H),
+        r:      rand(0.5, 2.8),
+        vx:     rand(-0.25, 0.25),
+        vy:     rand(-0.5, -0.08),
+        alpha:  alpha,
+        decay:  rand(0.002, 0.006),
+        color:  colorBase,
+        life:   rand(0.4, 1.0),
+        pulse:  rand(0, Math.PI * 2),
+        pSpeed: rand(0.01, 0.04),
+        flicker: Math.random() > 0.7,
+      };
+    }
+
+    function initParticles() {
+      particles = [];
+      for (var i = 0; i < COUNT; i++) {
+        var p = createParticle();
+        p.life = Math.random();
+        particles.push(p);
+      }
+    }
+
+    function drawParticle(p) {
+      p.pulse += p.pSpeed;
+      var flick = p.flicker ? (0.6 + 0.4 * Math.abs(Math.sin(p.pulse * 30))) : 1;
+      var a = p.alpha * p.life * flick;
+
+      if (p.r > 1.8) {
+        var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        grad.addColorStop(0,   p.color + Math.min(a, 0.9) + ')');
+        grad.addColorStop(0.5, p.color + (a * 0.5) + ')');
+        grad.addColorStop(1,   p.color + '0)');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + a + ')';
+        ctx.fill();
+      }
+    }
+
+    function updateParticle(p) {
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.life -= p.decay;
+
+      var cx = W / 2, cy = H / 2;
+      var dx = cx - p.x, dy = cy - p.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 10) {
+        p.vx += (dx / dist) * 0.004;
+        p.vy += (dy / dist) * 0.004;
+      }
+      p.vx *= 0.998;
+      p.vy *= 0.998;
+
+      if (p.life <= 0) {
+        var np = createParticle();
+        Object.assign(p, np);
+        p.life = 0;
+      }
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < particles.length; i++) {
+        drawParticle(particles[i]);
+        updateParticle(particles[i]);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', function () { resize(); initParticles(); });
+    resize();
+    initParticles();
+    loop();
+  })();
+  </script>
+
+</body>
+</html>
