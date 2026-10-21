@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN // Sivoleck Guestbook</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* ── Reset & Base ─────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #060606;
+            --surface: #0c0c0c;
+            --border: #1e1e1e;
+            --cyan: #00f3ff;
+            --magenta: #ff00ff;
+            --violet: #9d00ff;
+            --text: #ccc;
+            --dim: #555;
+            --error: #ff3333;
+            --ok: #00ff88;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+        }
+
+        /* ── Layout ───────────────────────────────────────── */
+        .wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        /* ── Login screen ─────────────────────────────────── */
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .login-title {
+            font-family: 'VT323', monospace;
+            font-size: 2.2rem;
+            color: var(--violet);
+            letter-spacing: 0.1em;
+        }
+        .login-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            width: min(420px, 92vw);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .login-prompt {
+            color: var(--cyan);
+            font-size: 0.82rem;
+        }
+        .login-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .login-input-row span { color: var(--dim); }
+        #pwd-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            outline: none;
+            caret-color: var(--cyan);
+            letter-spacing: 0.1em;
+        }
+        #login-error {
+            color: var(--error);
+            font-size: 0.78rem;
+            min-height: 1.2em;
+        }
+
+        /* ── Admin panel ──────────────────────────────────── */
+        #admin-panel { display: none; }
+
+        .admin-header {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: var(--violet);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .admin-header span { font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; }
+
+        /* Sections */
+        .section-title {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            color: var(--cyan);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Import area */
+        #json-import {
+            display: block;
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            padding: 0.75rem;
+            height: 130px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 0.75rem;
+            caret-color: var(--cyan);
+        }
+        #json-import:focus { border-color: var(--violet); }
+        #import-hint { font-size: 0.72rem; color: var(--dim); margin-bottom: 0.75rem; }
+        #import-status { font-size: 0.78rem; min-height: 1.2em; margin-top: 0.5rem; }
+
+        /* Submission list */
+        #submissions-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
+        #no-submissions { color: var(--dim); font-size: 0.8rem; }
+
+        .sub-entry {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+            transition: border-color 0.2s;
+        }
+        .sub-entry.blocked {
+            opacity: 0.4;
+            border-color: var(--error);
+        }
+        .sub-info { flex: 1; min-width: 0; }
+        .sub-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.25rem;
+        }
+        .sub-alias { color: var(--cyan); font-weight: 700; }
+        .sub-lang  { color: var(--dim); font-size: 0.7rem; }
+        .sub-date  { color: var(--dim); font-size: 0.7rem; margin-left: auto; }
+        .sub-msg   { color: var(--text); word-break: break-word; margin-top: 0.2rem; }
+        .sub-id    { color: #333; font-size: 0.65rem; margin-top: 0.2rem; }
+
+        /* Blocklist */
+        #blocklist-display {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            min-height: 48px;
+            font-size: 0.75rem;
+            color: var(--error);
+            word-break: break-all;
+            margin-bottom: 0.75rem;
+        }
+        #blocklist-count { color: var(--dim); font-size: 0.72rem; }
+
+        /* Buttons */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 2px;
+        }
+        .btn:hover       { border-color: var(--violet); color: var(--violet); box-shadow: 0 0 6px rgba(157,0,255,0.25); }
+        .btn.btn-primary { border-color: var(--cyan);   color: var(--cyan); }
+        .btn.btn-primary:hover { background: var(--cyan); color: #000; box-shadow: 0 0 10px rgba(0,243,255,0.4); }
+        .btn.btn-danger  { border-color: var(--error);  color: var(--error); }
+        .btn.btn-danger:hover  { background: var(--error); color: #000; box-shadow: 0 0 8px rgba(255,51,51,0.35); }
+        .btn.btn-block   { border-color: #333; color: #555; font-size: 0.72rem; padding: 0.25rem 0.6rem; }
+        .btn.btn-block.is-blocked { border-color: var(--error); color: var(--error); }
+        .btn.btn-block:hover { border-color: var(--error); color: var(--error); }
+
+        .btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+        /* Note */
+        .note {
+            font-size: 0.72rem;
+            color: var(--dim);
+            border-left: 2px solid var(--border);
+            padding-left: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .section-sep { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+        /* Colors for status messages */
+        .ok      { color: var(--ok); }
+        .err     { color: var(--error); }
+        .neutral { color: var(--dim); }
+    </style>
+</head>
+<body>
+
+<!-- ── Login ──────────────────────────────────────────────── -->
+<div id="login-screen">
+    <div class="login-title">ADMIN // SIVOLECK</div>
+    <div class="login-box">
+        <div class="login-prompt">// Authentication required</div>
+        <div class="login-prompt">// Enter password to access guestbook control</div>
+        <div class="login-input-row">
+            <span>admin@sivoleck:~$</span>
+            <input type="password" id="pwd-input" placeholder="password" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary" id="login-btn">AUTHENTICATE</button>
+        <div id="login-error"></div>
+    </div>
+</div>
+
+<!-- ── Admin panel ────────────────────────────────────────── -->
+<div id="admin-panel">
+<div class="wrapper">
+
+    <div class="admin-header">
+        ADMIN // GUESTBOOK CONTROL
+        <span id="session-info">session active</span>
+    </div>
+
+    <!-- ── Import JSON ──────────────────────────────────── -->
+    <div class="card">
+        <div class="section-title">// IMPORT SUBMISSIONS</div>
+        <div id="import-hint">
+            Paste the JSON export from your Formspree dashboard below.<br>
+            Expected format: array of objects with fields: submittedAt, data { alias, message, language }
+        </div>
+        <textarea id="json-import" placeholder='[{"submittedAt":"2026-01-01T00:00:00Z","data":{"alias":"...","message":"...","language":"es"}}]'></textarea>
+        <div class="btn-row">
+            <button class="btn btn-primary" id="import-btn">PARSE + LOAD</button>
+            <button class="btn"             id="clear-import-btn">CLEAR</button>
+        </div>
+        <div id="import-status"></div>
+    </div>
+
+    <!-- ── Submission list ──────────────────────────────── -->
+    <div class="card">
+        <div class="section-title">// SUBMISSIONS</div>
+        <div id="submissions-list">
+            <div id="no-submissions">// No submissions loaded. Import JSON above.</div>
+        </div>
+    </div>
+
+    <!-- ── Blocklist ────────────────────────────────────── -->
+    <div class="card">
+        <div class="section-title">// BLOCKLIST</div>
+        <div id="blocklist-count">0 entries blocked</div>
+        <div id="blocklist-display">// empty</div>
+        <div class="btn-row">
+            <button class="btn btn-danger" id="clear-blocklist-btn">CLEAR BLOCKLIST</button>
+            <button class="btn"            id="copy-blocklist-btn" >COPY JSON</button>
+        </div>
+        <div class="note">
+            NOTE: Blocklisted IDs are stored in <strong>localStorage</strong> and hidden from the guestbook.<br>
+            For permanent deletion, use the <a href="https://formspree.io" target="_blank" style="color:#555">Formspree dashboard</a>.
+        </div>
+    </div>
+
+    <!-- ── Logout ────────────────────────────────────────── -->
+    <div style="text-align:right">
+        <button class="btn btn-danger" id="logout-btn">LOGOUT</button>
+    </div>
+
+</div><!-- /wrapper -->
+</div><!-- /admin-panel -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════════════ */
+// Change this password directly in this file
+const ADMIN_PASSWORD = 'sivoleck_admin';
+const BLOCKLIST_KEY  = 'gb_blocklist';
+
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+
+function getBlocklist() {
+    try { return JSON.parse(localStorage.getItem(BLOCKLIST_KEY) || '[]'); }
+    catch { return []; }
+}
+
+function saveBlocklist(list) {
+    localStorage.setItem(BLOCKLIST_KEY, JSON.stringify(list));
+}
+
+function renderBlocklist() {
+    const list = getBlocklist();
+    $('blocklist-count').textContent = `${list.length} entries blocked`;
+    $('blocklist-display').textContent = list.length
+        ? list.join('\n')
+        : '// empty';
+}
+
+function setStatus(el, msg, type = 'neutral') {
+    el.textContent = msg;
+    el.className = type;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════════════ */
+function tryLogin() {
+    const val = $('pwd-input').value.trim();
+    if (val === ADMIN_PASSWORD) {
+        $('login-screen').style.display = 'none';
+        $('admin-panel').style.display  = 'block';
+        renderBlocklist();
+    } else {
+        $('login-error').textContent = '// ERROR: Invalid credentials';
+        $('pwd-input').value = '';
+        $('pwd-input').focus();
+    }
+}
+
+$('login-btn').addEventListener('click', tryLogin);
+$('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+/* ═══════════════════════════════════════════════════════════
+   IMPORT + PARSE
+═══════════════════════════════════════════════════════════ */
+let submissions = [];
+
+$('import-btn').addEventListener('click', () => {
+    const raw = $('json-import').value.trim();
+    if (!raw) {
+        setStatus($('import-status'), '// Nothing to import', 'neutral');
+        return;
+    }
+    try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) throw new Error('Expected JSON array');
+
+        submissions = parsed.map((item, i) => {
+            // Support both direct object and Formspree export format
+            const data    = item.data || item;
+            const alias   = (data.alias   || data.name  || 'anonymous').toString().substring(0, 40);
+            const message = (data.message || data.msg   || '').toString().substring(0, 400);
+            const language= (data.language|| data.lang  || 'es').toString().substring(0, 5);
+            const date    = item.submittedAt || item.date || item.createdAt || '';
+            const id      = item._id || item.id || `import_${i}_${Date.now()}`;
+            return { id, alias, message, language, date };
+        });
+
+        renderSubmissions();
+        setStatus($('import-status'), `// Loaded ${submissions.length} submissions`, 'ok');
+    } catch (err) {
+        setStatus($('import-status'), `// JSON parse error: ${err.message}`, 'err');
+    }
+});
+
+$('clear-import-btn').addEventListener('click', () => {
+    $('json-import').value = '';
+    submissions = [];
+    renderSubmissions();
+    setStatus($('import-status'), '// Cleared', 'neutral');
+});
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER SUBMISSIONS
+═══════════════════════════════════════════════════════════ */
+function renderSubmissions() {
+    const list = $('submissions-list');
+    list.innerHTML = '';
+
+    if (!submissions.length) {
+        list.innerHTML = '<div id="no-submissions">// No submissions loaded. Import JSON above.</div>';
+        return;
+    }
+
+    const blocked = getBlocklist();
+
+    submissions.forEach(sub => {
+        const isBlocked = blocked.includes(sub.id);
+        const div = document.createElement('div');
+        div.className = `sub-entry${isBlocked ? ' blocked' : ''}`;
+        div.dataset.id = sub.id;
+
+        const dateStr = sub.date
+            ? new Date(sub.date).toLocaleDateString('es-ES', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
+            : '—';
+
+        div.innerHTML = `
+            <div class="sub-info">
+                <div class="sub-header">
+                    <span class="sub-alias">${escHtml(sub.alias)}</span>
+                    <span class="sub-lang">[${escHtml(sub.language.toUpperCase())}]</span>
+                    <span class="sub-date">${dateStr}</span>
+                </div>
+                <div class="sub-msg">${escHtml(sub.message)}</div>
+                <div class="sub-id">ID: ${escHtml(sub.id)}</div>
+            </div>
+            <button class="btn btn-block ${isBlocked ? 'is-blocked' : ''}" data-id="${escHtml(sub.id)}">
+                ${isBlocked ? 'UNBLOCK' : 'BLOCK'}
+            </button>
+        `;
+
+        list.appendChild(div);
+    });
+}
+
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BLOCK / UNBLOCK DELEGATION
+═══════════════════════════════════════════════════════════ */
+$('submissions-list').addEventListener('click', e => {
+    const btn = e.target.closest('.btn-block');
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    let list = getBlocklist();
+
+    if (list.includes(id)) {
+        list = list.filter(x => x !== id);
+    } else {
+        list.push(id);
+    }
+
+    saveBlocklist(list);
+    renderBlocklist();
+    renderSubmissions(); // refresh UI
+});
+
+/* ═══════════════════════════════════════════════════════════
+   BLOCKLIST CONTROLS
+═══════════════════════════════════════════════════════════ */
+$('clear-blocklist-btn').addEventListener('click', () => {
+    if (!confirm('Clear ALL blocked IDs? This will make all messages visible again.')) return;
+    saveBlocklist([]);
+    renderBlocklist();
+    renderSubmissions();
+});
+
+$('copy-blocklist-btn').addEventListener('click', async () => {
+    const list = getBlocklist();
+    const json = JSON.stringify(list, null, 2);
+    try {
+        await navigator.clipboard.writeText(json);
+        const btn = $('copy-blocklist-btn');
+        const orig = btn.textContent;
+        btn.textContent = 'COPIED!';
+        setTimeout(() => btn.textContent = orig, 1500);
+    } catch {
+        prompt('Copy blocklist JSON:', json);
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════════════════════════ */
+$('logout-btn').addEventListener('click', () => {
+    $('admin-panel').style.display  = 'none';
+    $('login-screen').style.display = 'flex';
+    $('pwd-input').value = '';
+});
+</script>
+
+</body>
+</html>
